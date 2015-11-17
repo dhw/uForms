@@ -1,0 +1,26 @@
+﻿using UnityEngine;
+using UnityEditor;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+
+namespace uForms
+{
+    /// <summary></summary>
+    public class #SCRIPTNAME# : EditorWindow
+    {
+        /// <summary>ウィンドウを開く</summary>
+        [MenuItem("Tools/#SCRIPTNAME#")]
+        static void OpenWindow()
+        {
+            EditorWindow.GetWindow<#SCRIPTNAME#>();
+        }
+        
+        /// <summary>ウィンドウの描画処理</summary>
+        void OnGUI()
+        { 
+        
+        }
+    }
+}
