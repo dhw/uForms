@@ -5,18 +5,18 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace uForms
+namespace uForms.Editor.View
 {
     public class DesignerView : EditorWindow
     {
-        public static void OpenWindow()
+        public static DesignerView OpenWindow()
         {
-            GetWindow<DesignerView>("Designer");
+            return GetWindow<DesignerView>("Designer");
         }
         
         void OnGUI()
-        { 
-        
+        {
+            UFStudio.project.rootWindow.DrawDesign();
         }
     }
 }
