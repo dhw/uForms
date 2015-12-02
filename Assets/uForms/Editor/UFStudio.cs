@@ -29,9 +29,7 @@ namespace uForms.Editor
 
             UFSelection.OnSelectionChange += (ctrl) =>
             {
-                property.Repaint();
-                designer.Repaint();
-                outline.Repaint();
+                Repaint();
             };
 
             var pRect = property.position;
@@ -51,11 +49,11 @@ namespace uForms.Editor
             // テストプロジェクト
             project = new UFProject();
 
-            UFStackPanel sp = new UFStackPanel();
+            UFStackPanel sp = new UFStackPanel(project.rootWindow);
             sp.direction = StackDirection.Horizontal;
             UFLabel label = new UFLabel();
             label.Text = "テストラベル";
-            UFButton button = new UFButton();
+            UFButton button = new UFButton(sp);
             button.Text = "テスト";
             sp.Name = "StackPanel";
             label.Name = "Label";
@@ -63,7 +61,26 @@ namespace uForms.Editor
             sp.AddChild(label);
             sp.AddChild(button);
             project.rootWindow.Name = "Window";
-            project.rootWindow.AddChild(sp);
+            //project.rootWindow.AddChild(sp);
+
+            UFCanvas canvas = new UFCanvas(project.rootWindow);
+            canvas.Name = "Canvas1";
+            project.rootWindow.AddChild(canvas);
+            UFButton button2 = new UFButton(canvas);
+            button2.Text = "テストA";
+            button2.Name = "Button1";
+            canvas.AddChild(button2);
+            UFButton button3 = new UFButton(canvas);
+            button3.Text = "テストB";
+            button3.Name = "Button2";
+            canvas.AddChild(button3);
+        }
+
+        public static void Repaint()
+        {
+            property.Repaint();
+            designer.Repaint();
+            outline.Repaint();
         }
     }
 }

@@ -11,6 +11,6 @@ namespace uForms
     /// <summary></summary>
     public class UFProject
     {
-        public UFWindow rootWindow = new UFWindow();
+        public UFWindow rootWindow = new UFWindow(new Vector2(400,400));
     }
 }

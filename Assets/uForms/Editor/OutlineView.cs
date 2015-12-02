@@ -99,7 +99,7 @@ namespace uForms.Editor.View
 
             GUILayout.Label(current.Name);
 
-            GUIContent visibleContent = (current.IsHidden ? UFContent.VisibleSwitch : UFContent.Minus);
+            GUIContent visibleContent = (current.IsHidden ? UFContent.Minus : UFContent.VisibleSwitch);
             if(GUILayout.Button(visibleContent, EditorStyles.label, GUILayout.Width(20)))
             {
                 current.IsHidden = !current.IsHidden;
@@ -113,6 +113,10 @@ namespace uForms.Editor.View
 
             GUILayout.EndHorizontal();
             //GUI.DragWindow();
+            if(GUI.changed)
+            {
+                UFStudio.Repaint();
+            }
         }
     }
 }
