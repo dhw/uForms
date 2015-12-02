@@ -13,10 +13,23 @@ namespace uForms.Editor.View
         {
             return GetWindow<DesignerView>("Designer");
         }
-        
+
+        void Awake()
+        {
+            this.wantsMouseMove = true;
+        }
+
         void OnGUI()
         {
             UFStudio.project.rootWindow.DrawDesign();
+
+            if(UFSelection.ActiveControl != null)
+            {
+                BeginWindows();
+                UFSelection.ActiveControl.DrawGuide();
+                EndWindows();
+            }
+
         }
     }
 }
