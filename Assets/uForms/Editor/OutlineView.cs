@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using uForms.Editor.Control;
 using UnityEditor;
 using UnityEngine;
@@ -16,9 +17,43 @@ namespace uForms.Editor.View
 
         List<UFControl> drawList = null;
 
+        GenericMenu menu = new GenericMenu();
+
         void Awake()
         {
+            menu.AddItem(new GUIContent("Delete"), false, OnMenuDelete);
+            menu.AddItem(new GUIContent("Add/Button"), false, OnMenuAdd, "Button");
+            menu.AddItem(new GUIContent("Add/Label"), false, OnMenuAdd, "Label");
+        }
 
+        private void OnMenuDelete()
+        {
+            if(UFSelection.ActiveControl != null)
+            {
+                Debug.Log("delete : " + UFSelection.ActiveControl.Name);
+            }
+        }
+
+        private void OnMenuAdd(object type)
+        {
+            var current = UFSelection.ActiveControl;
+            if(current == null) { return; }
+            string typeString = (string)type;
+            switch(typeString)
+            {
+                case "Button":
+                    var button = new UFButton(current);
+                    button.Name = "HogeButton";
+                    button.Text = "Hoge";
+                    current.AddChild(button);
+                    break;
+                case "Label":
+                    var label = new UFLabel();
+                    label.Name = "HogeButton";
+                    label.Text = "Hoge";
+                    current.AddChild(label);
+                    break;
+            }
         }
 
         void OnEnable()
@@ -27,6 +62,11 @@ namespace uForms.Editor.View
         
         void OnGUI()
         {
+            if(Event.current.type == EventType.ContextClick)
+            {
+                this.menu.ShowAsContext();
+            }
+
             GUILayout.BeginHorizontal();
             {
                 GUILayout.Label(" ");
@@ -50,6 +90,7 @@ namespace uForms.Editor.View
 
             BeginWindows();
             {
+                bool anyControlSelected = false;
                 for(int i = 0; i < this.drawList.Count; ++i)
                 {
                     Rect rect = new Rect(0, 40 + (i * 16), this.position.width, 16);
@@ -60,7 +101,12 @@ namespace uForms.Editor.View
                     if(Event.current.type == EventType.MouseUp && rect.Contains(Event.current.mousePosition))
                     {
                         UFSelection.ActiveControl = this.drawList[i];
+                        anyControlSelected = true;
                     }
+                }
+                if(Event.current.type == EventType.MouseUp && !anyControlSelected)
+                {
+                    UFSelection.ActiveControl = null;
                 }
             }
             EndWindows();
