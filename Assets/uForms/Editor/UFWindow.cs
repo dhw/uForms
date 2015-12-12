@@ -1,21 +1,41 @@
-﻿using System;
+﻿using UnityEditor;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
 
-namespace uForms.Editor.Control
+namespace uForms
 {
-    public class UFWindow : UFControl
+    /// <summary></summary>
+    public class UFWindow : EditorWindow
     {
-        public UFWindow(Vector2 size)
+        private List<UFControl> controls = new List<UFControl>();
+
+        public List<UFControl> Controls
         {
-            this.rect = new Rect(Vector2.zero, size);
+            get
+            {
+                return this.controls;
+            }
         }
 
-        public override void DrawDesign()
+        /// <summary>ウィンドウの描画処理</summary>
+        private void OnGUI()
         {
-            this.childList.ForEach(child => child.DrawDesign());
+            if(this.controls == null) { return; }
+
+            PreOnGUI();
+
+            this.controls.ForEach(control => control.Draw());
+
+            PostOnGUI();
+        }
+
+        protected virtual void PreOnGUI()
+        {
+
+        }
+
+        protected virtual void PostOnGUI()
+        {
+
         }
     }
 }

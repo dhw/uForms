@@ -1,9 +1,4 @@
-﻿using UnityEngine;
-using UnityEditor;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using UnityEditor;
 
 namespace uForms.Editor.View
 {
@@ -21,7 +16,7 @@ namespace uForms.Editor.View
 
         void OnGUI()
         {
-            UFStudio.project.rootWindow.DrawDesign();
+            UFStudio.project.root.DrawTree();
 
             if(UFSelection.ActiveControl != null)
             {

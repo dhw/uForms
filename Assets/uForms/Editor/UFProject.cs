@@ -1,9 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using uForms.Editor.Control;
 
 namespace uForms
@@ -11,6 +6,8 @@ namespace uForms
     /// <summary></summary>
     public class UFProject
     {
-        public UFWindow rootWindow = new UFWindow(new Vector2(400,400));
+        public string nameSpace = "sample";
+        public string className = "SampleEditor";
+        public UFRoot root = new UFRoot(new Vector2(400,400));
     }
 }

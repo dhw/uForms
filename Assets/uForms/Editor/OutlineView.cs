@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using uForms.Editor.Control;
+﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -45,13 +43,13 @@ namespace uForms.Editor.View
                     var button = new UFButton(current);
                     button.Name = "HogeButton";
                     button.Text = "Hoge";
-                    current.AddChild(button);
+                    current.Add(button);
                     break;
                 case "Label":
-                    var label = new UFLabel();
+                    var label = new UFLabel(Vector2.zero);
                     label.Name = "HogeButton";
                     label.Text = "Hoge";
-                    current.AddChild(label);
+                    current.Add(label);
                     break;
             }
         }
@@ -72,21 +70,21 @@ namespace uForms.Editor.View
                 GUILayout.Label(" ");
                 if(GUILayout.Button(UFContent.VisibleSwitch, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(16)))
                 {
-                    bool allHidden = !UFStudio.project.rootWindow.IsHidden;
-                    UFStudio.project.rootWindow.ForTree(node => node.IsHidden = allHidden);
+                    bool allHidden = !UFStudio.project.root.IsHidden;
+                    UFStudio.project.root.ForTree(node => node.IsHidden = allHidden);
                 }
 
                 if(GUILayout.Button(UFContent.LockSwitch, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(16)))
                 {
-                    bool allLock = !UFStudio.project.rootWindow.IsLocked;
-                    UFStudio.project.rootWindow.ForTree(node => node.IsLocked = allLock);
+                    bool allLock = !UFStudio.project.root.IsLocked;
+                    UFStudio.project.root.ForTree(node => node.IsLocked = allLock);
                 }
             }
             GUILayout.EndHorizontal();
 
             GUILayout.Space(20);
 
-            this.drawList = UFStudio.project.rootWindow.GetOutlineDrawList();
+            this.drawList = UFStudio.project.root.GetOutlineDrawList();
 
             BeginWindows();
             {

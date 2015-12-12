@@ -1,13 +1,9 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using uForms.Editor.View;
 using uForms.Editor.Control;
 
-namespace uForms.Editor
+namespace uForms
 {
     /// <summary></summary>
     public class UFStudio
@@ -49,31 +45,31 @@ namespace uForms.Editor
             // テストプロジェクト
             project = new UFProject();
 
-            UFStackPanel sp = new UFStackPanel(project.rootWindow);
+            UFStackPanel sp = new UFStackPanel(project.root);
             sp.direction = StackDirection.Horizontal;
-            UFLabel label = new UFLabel();
+            UFLabel label = new UFLabel(Vector2.zero);
             label.Text = "テストラベル";
             UFButton button = new UFButton(sp);
             button.Text = "テスト";
             sp.Name = "StackPanel";
             label.Name = "Label";
             button.Name = "Button";
-            sp.AddChild(label);
-            sp.AddChild(button);
-            project.rootWindow.Name = "Window";
+            sp.Add(label);
+            sp.Add(button);
+            project.root.Name = "Window";
             //project.rootWindow.AddChild(sp);
 
-            UFCanvas canvas = new UFCanvas(project.rootWindow);
+            UFCanvas canvas = new UFCanvas(project.root);
             canvas.Name = "Canvas1";
-            project.rootWindow.AddChild(canvas);
+            project.root.Add(canvas);
             UFButton button2 = new UFButton(canvas);
             button2.Text = "テストA";
             button2.Name = "Button1";
-            canvas.AddChild(button2);
+            canvas.Add(button2);
             UFButton button3 = new UFButton(canvas);
             button3.Text = "テストB";
             button3.Name = "Button2";
-            canvas.AddChild(button3);
+            canvas.Add(button3);
         }
 
         public static void Repaint()

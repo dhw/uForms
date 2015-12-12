@@ -2,13 +2,13 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace uForms.Editor.Control
+namespace uForms
 {
     /// <summary></summary>
     public class UFControl
     {
-        private GUIContent name = new GUIContent("");
-        private GUIContent text = new GUIContent("");
+        protected GUIContent name = new GUIContent("");
+        protected GUIContent text = new GUIContent("");
 
         public UFControl()
         {
@@ -134,7 +134,7 @@ namespace uForms.Editor.Control
             }
         }
 
-        public void AddChild(UFControl child)
+        public void Add(UFControl child)
         {
             child.parent = this;
             this.childList.Add(child);
@@ -165,11 +165,21 @@ namespace uForms.Editor.Control
             }
         }
 
+        public virtual void Draw()
+        {
+
+        }
+
+        public virtual void DrawByRect()
+        {
+
+        }
+
         public virtual void DrawDesign()
         {
         }
 
-        public virtual void DrawByRect()
+        public virtual void DrawDesignByRect()
         {
 
         }
@@ -214,7 +224,7 @@ namespace uForms.Editor.Control
             this.rect = GUI.Window(-1, this.rect, DrawGuideRect, "", "grey_border");
 
             int guideNum = 8;
-            int margin = 2;
+            int margin = 3;
             int size = (margin * 2) + 1;
 
             float sx = this.rect.x;
@@ -338,5 +348,17 @@ namespace uForms.Editor.Control
             this.rect.position += delta;
         }
 
+        public virtual void WriteCode(CodeBuilder builder)
+        {
+            builder.WriteLine("this." + this.Name + ".Text = \"" + this.Text + "\";");
+            builder.WriteLine("this." + this.Name + ".Name = \"" + this.Name + "\";");
+            builder.WriteLine("this." + this.Name + ".IsEnabled = " + (this.IsEnabled ? "true" : "false") + ";");
+            builder.WriteLine("this." + this.Name + ".IsHidden = " + (this.IsHidden ? "true" : "false") + ";");
+        }
+        
+        public virtual void WriteDefinitionCode(CodeBuilder builder)
+        {
+            throw new System.Exception("Please override code!");
+        }
     }
 }

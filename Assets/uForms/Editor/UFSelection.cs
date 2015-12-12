@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using uForms.Editor.Control;
-
-namespace uForms
+﻿namespace uForms
 {
     /// <summary></summary>
     public class UFSelection
