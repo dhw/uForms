@@ -1,13 +1,15 @@
-﻿using UnityEngine;
+﻿using System.Xml.Serialization;
+using UnityEngine;
 
 namespace uForms
 {
     public class UFButton : UFControl
     {
+        public static readonly Vector2 DefaultOffset = new Vector2(10,10);
+        public static readonly Vector2 DefaultSize = new Vector2(80,16);
+        
+        [XmlIgnore]
         public System.Action OnClick = null;
-
-        public Vector2 DefaultOffset = new Vector2(10,10);
-        public Vector2 DefaultSize = new Vector2(80,16);
 
         public override void Draw()
         {
@@ -41,6 +43,8 @@ namespace uForms
             if(IsHidden) { return; }
             GUI.Label(this.rect, this.text, "button");
         }
+
+        public UFButton() { }
 
         public UFButton(Vector2 position)
         {

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace uForms.Editor.Control
+namespace uForms
 {
     public class UFRoot : UFControl
     {
+        public UFRoot() { }
+
         public UFRoot(Vector2 size)
         {
             this.rect = new Rect(Vector2.zero, size);

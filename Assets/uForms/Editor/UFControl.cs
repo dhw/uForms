@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,7 +9,10 @@ namespace uForms
     /// <summary></summary>
     public class UFControl
     {
+        [XmlIgnore]
         protected GUIContent name = new GUIContent("");
+
+        [XmlIgnore]
         protected GUIContent text = new GUIContent("");
 
         public UFControl()
@@ -50,10 +55,13 @@ namespace uForms
         private bool isEnabled = true;
         private bool foldout = true;
 
+        [XmlIgnore]
         protected UFControl parent = null;
-        protected List<UFControl> childList = new List<UFControl>();
-        protected Rect rect = new Rect(0,0,100,100);
 
+        public List<UFControl> childList = new List<UFControl>();
+        [XmlIgnore]
+        protected Rect rect = new Rect(0,0,100,100);
+        
         public Rect DrawRect { get { return this.rect; } }
 
         public int TreeCount

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Xml.Serialization;
 using UnityEditor;
 using UnityEngine;
 
@@ -48,6 +49,59 @@ namespace uForms
 
             Build(project);
         }
+
+        [MenuItem("Tools/Test2")]
+        public static void Test2()
+        {
+            UFProject project = new UFProject();
+            project.className = "HidakaEditor";
+            project.nameSpace = "hidaka";
+
+            UFCanvas canvas1 = new UFCanvas();
+            canvas1.Text = "canvas1";
+            canvas1.Name = "canvas1";
+            project.root.Add(canvas1);
+            UFButton button1 = new UFButton(new Vector2(5, 60));
+            button1.Text = "テストA";
+            button1.Name = "button1";
+            canvas1.Add(button1);
+            UFLabel label1 = new UFLabel(new Vector2(5, 20));
+            label1.Text = "テストC";
+            label1.Name = "label1";
+            canvas1.Add(label1);
+
+            var attrOverride = new XmlAttributeOverrides(); //属性上書き情報
+
+            var attributes = new XmlAttributes();       //属性のリスト
+
+            //リフレクションを使用してClassList.Childrenの既存属性[XmlArrayItem]を列挙して追加
+            var info = typeof(UFControl).GetMember("childList")[0];
+            var originalAttrs = Attribute.GetCustomAttributes(info, typeof(XmlArrayItemAttribute));
+            foreach(var attr in originalAttrs)
+            {
+                attributes.XmlArrayItems.Add(attr as XmlArrayItemAttribute);
+            }
+
+            var ase = Assembly.GetAssembly(typeof(UFControl));
+            var list = ase.GetTypes()
+                .Where(t => t.BaseType == typeof(UFControl))
+                .ToList();
+
+            list.Clear();
+            project.root.ForTree(node =>
+            {
+                list.Add(node.GetType());
+            });
+            
+            list.Add(typeof(UFControl));
+            list = list.Distinct().ToList();
+
+            list.ForEach(t => attributes.XmlArrayItems.Add(new XmlArrayItemAttribute(t)));
+            attrOverride.Add(typeof(UFControl), "childList", attributes);
+            
+            UFUtility.ExportXml("Data/HidakaEditor.xml", project, attrOverride:attrOverride);
+        }
+
         public static void Build(UFProject project)
         {
             {

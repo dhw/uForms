@@ -26,6 +26,9 @@ namespace uForms
             GUI.Label(this.rect, this.text);
         }
 
+        public UFLabel()
+        { }
+
         public UFLabel(Vector2 position)
         {
             this.rect = new Rect(position, DefaultSize);
