@@ -99,8 +99,16 @@ namespace uForms
                 #endregion
             }
 
-            AssetDatabase.ImportAsset(codePath);
-            AssetDatabase.ImportAsset(designerCodePath);
+            if(codePath.Contains("Assets/"))
+            {
+                codePath = codePath.Substring(codePath.IndexOf("Assets/"));
+                AssetDatabase.ImportAsset(codePath);
+            }
+            if(designerCodePath.Contains("Assets/"))
+            {
+                designerCodePath = designerCodePath.Substring(designerCodePath.IndexOf("Assets/"));
+                AssetDatabase.ImportAsset(designerCodePath);
+            }
         }
 
         public void ExportXml(string xmlPath)
@@ -153,6 +161,29 @@ namespace uForms
             attrOverride.Add(typeof(UFControl), "childList", attributes);
             attrOverride.Add(typeof(UFProject), "Controls", attributes);
             UFProject project = UFUtility.ImportXml<UFProject>(xmlPath, attrOverride:attrOverride);
+
+            project.Controls.ForEach(child => child.RefleshHierarchy());
+
+            return project;
+        }
+
+        public static UFProject CreateFromType(Type t)
+        {
+            if(t.BaseType != typeof(UFWindow))
+            {
+                throw new Exception("CreateFromTypeException!!");
+            }
+
+            UFProject project = new UFProject();
+            project.nameSpace = t.Namespace;
+            project.className = t.Name;
+
+            var instance = Activator.CreateInstance(t);
+            //var method = t.GetMethod("InitializeComponent", BindingFlags.NonPublic | BindingFlags.Instance);
+            //method.Invoke(instance, null);
+
+            var window = instance as UFWindow;
+            project.Controls.AddRange(window.Controls);
 
             project.Controls.ForEach(child => child.RefleshHierarchy());
 

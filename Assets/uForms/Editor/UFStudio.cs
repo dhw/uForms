@@ -115,6 +115,16 @@ namespace uForms
                     Debug.Log(path);
                 }
             }
+
+            if(GUILayout.Button("Import Code"))
+            {
+                UFSelector.OpenWindow((t) =>
+                {
+                    project = UFProject.CreateFromType(t);
+                    UFSelection.ActiveControl = null;
+                    RepaintAll();
+                });
+            }
         }
     }
 }
