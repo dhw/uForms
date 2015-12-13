@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEngine;
 
 namespace uForms.Editor.View
 {
@@ -16,6 +17,11 @@ namespace uForms.Editor.View
 
         void OnGUI()
         {
+            if(Event.current.type == EventType.MouseDown)
+            {
+                CheckSelection();
+            }
+
             UFStudio.project.root.DrawTree();
 
             if(UFSelection.ActiveControl != null)
@@ -24,7 +30,29 @@ namespace uForms.Editor.View
                 UFSelection.ActiveControl.DrawGuide();
                 EndWindows();
             }
+        }
 
+        void CheckSelection()
+        {
+            Vector2 click = Event.current.mousePosition;
+            bool selected = false;
+
+            UFStudio.project.root.ForTreeFromChild(child =>
+            {
+                if(selected) { return; }
+                if(UFSelection.ActiveControl == child)
+                {
+                    if(child.DrawRectWithGuide.Contains(click))
+                    {
+                        selected = true;
+                    }
+                }
+                if(child.DrawRect.Contains(click))
+                {
+                    UFSelection.ActiveControl = child;
+                    selected = true;
+                }
+            });
         }
     }
 }

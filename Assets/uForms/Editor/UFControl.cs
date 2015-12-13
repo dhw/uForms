@@ -9,6 +9,10 @@ namespace uForms
     /// <summary></summary>
     public class UFControl
     {
+        const int GuideNum = 8;
+        const int GuideMargin = 3;
+        const int GuideSize = (GuideMargin * 2) + 1;
+
         [XmlIgnore]
         protected GUIContent name = new GUIContent("");
 
@@ -63,6 +67,14 @@ namespace uForms
         protected Rect rect = new Rect(0,0,100,100);
         
         public Rect DrawRect { get { return this.rect; } }
+
+        public Rect DrawRectWithGuide
+        {
+            get
+            {
+                return new Rect(this.rect.x - GuideSize, this.rect.y - GuideSize, this.rect.width + (GuideSize * 2), this.rect.height + (GuideSize * 2));
+            }
+        }
 
         public int TreeCount
         {
@@ -172,6 +184,17 @@ namespace uForms
                 this.childList.ForEach(child => child.ForTree(action));
             }
         }
+        public void ForTreeFromChild(System.Action<UFControl> action)
+        {
+            if(action != null)
+            {
+                for(int i = this.childList.Count - 1; i >= 0; --i)
+                {
+                    this.childList[i].ForTreeFromChild(action);
+                }
+                action(this);
+            }
+        }
 
         public virtual void Draw()
         {
@@ -231,9 +254,6 @@ namespace uForms
             Rect prev = this.rect;
             this.rect = GUI.Window(-1, this.rect, DrawGuideRect, "", "grey_border");
 
-            int guideNum = 8;
-            int margin = 3;
-            int size = (margin * 2) + 1;
 
             float sx = this.rect.x;
             float cx = this.rect.center.x;
@@ -242,7 +262,7 @@ namespace uForms
             float cy = this.rect.center.y;
             float ey = this.rect.y + this.rect.height;
             
-            Rect[] guides = new Rect[guideNum];
+            Rect[] guides = new Rect[GuideNum];
             /*
             guides[0].x = sx - margin;
             guides[0].y = sy - margin;
@@ -261,40 +281,40 @@ namespace uForms
             guides[7].x = sx - margin;
             guides[7].y = cy - margin;
             */
-            guides[0].x = sx - size;
-            guides[0].y = sy - size;
-            guides[1].x = cx - margin;
-            guides[1].y = sy - size;
+            guides[0].x = sx - GuideSize;
+            guides[0].y = sy - GuideSize;
+            guides[1].x = cx - GuideMargin;
+            guides[1].y = sy - GuideSize;
             guides[2].x = ex;
-            guides[2].y = sy - size;
+            guides[2].y = sy - GuideSize;
             guides[3].x = ex;
-            guides[3].y = cy - margin;
+            guides[3].y = cy - GuideMargin;
             guides[4].x = ex;
             guides[4].y = ey;
-            guides[5].x = cx - margin;
+            guides[5].x = cx - GuideMargin;
             guides[5].y = ey;
-            guides[6].x = sx - size;
+            guides[6].x = sx - GuideSize;
             guides[6].y = ey;
-            guides[7].x = sx - size;
-            guides[7].y = cy - margin;
-            guides[0].width = size;
-            guides[0].height = size;
-            guides[1].width = size;
-            guides[1].height = size;
-            guides[2].width = size;
-            guides[2].height = size;
-            guides[3].width = size;
-            guides[3].height = size;
-            guides[4].width = size;
-            guides[4].height = size;
-            guides[5].width = size;
-            guides[5].height = size;
-            guides[6].width = size;
-            guides[6].height = size;
-            guides[7].width = size;
-            guides[7].height = size;
+            guides[7].x = sx - GuideSize;
+            guides[7].y = cy - GuideMargin;
+            guides[0].width = GuideSize;
+            guides[0].height = GuideSize;
+            guides[1].width = GuideSize;
+            guides[1].height = GuideSize;
+            guides[2].width = GuideSize;
+            guides[2].height = GuideSize;
+            guides[3].width = GuideSize;
+            guides[3].height = GuideSize;
+            guides[4].width = GuideSize;
+            guides[4].height = GuideSize;
+            guides[5].width = GuideSize;
+            guides[5].height = GuideSize;
+            guides[6].width = GuideSize;
+            guides[6].height = GuideSize;
+            guides[7].width = GuideSize;
+            guides[7].height = GuideSize;
 
-            for(int i = 0; i < guideNum; ++i)
+            for(int i = 0; i < GuideNum; ++i)
             {
                 Rect guide = guides[i];
                 Rect result = GUI.Window(i, guide, DrawGuideRect, "", "LODSliderRangeSelected");
