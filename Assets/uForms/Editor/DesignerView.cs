@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace uForms.Editor.View
+namespace uForms
 {
     public class DesignerView : EditorWindow
     {
@@ -17,12 +17,14 @@ namespace uForms.Editor.View
 
         void OnGUI()
         {
+            if(UFStudio.project == null) { return; }
+
             if(Event.current.type == EventType.MouseDown)
             {
                 CheckSelection();
             }
 
-            UFStudio.project.root.DrawTree();
+            UFStudio.project.Controls.ForEach(child => child.DrawDesign());
 
             if(UFSelection.ActiveControl != null)
             {
@@ -37,22 +39,22 @@ namespace uForms.Editor.View
             Vector2 click = Event.current.mousePosition;
             bool selected = false;
 
-            UFStudio.project.root.ForTreeFromChild(child =>
+            UFStudio.project.Controls.ForEach(child => child.ForTreeFromChild(node =>
             {
                 if(selected) { return; }
-                if(UFSelection.ActiveControl == child)
+                if(UFSelection.ActiveControl == node)
                 {
-                    if(child.DrawRectWithGuide.Contains(click))
+                    if(node.DrawRectWithGuide.Contains(click - node.parentPosition))
                     {
                         selected = true;
                     }
                 }
-                if(child.DrawRect.Contains(click))
+                if(node.DrawRect.Contains(click - node.parentPosition))
                 {
-                    UFSelection.ActiveControl = child;
+                    UFSelection.ActiveControl = node;
                     selected = true;
                 }
-            });
+            }));
         }
     }
 }

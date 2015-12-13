@@ -24,7 +24,7 @@ namespace uForms
 
         public override void DrawByRect()
         {
-            if(GUI.Button(this.rect, this.text))
+            if(GUI.Button(this.DrawRect, this.text))
             {
                 if(this.OnClick != null)
                 {
@@ -41,24 +41,24 @@ namespace uForms
         public override void DrawDesignByRect()
         {
             if(IsHidden) { return; }
-            GUI.Label(this.rect, this.text, "button");
+            GUI.Label(this.DrawRect, this.text, "button");
         }
 
         public UFButton() { }
 
         public UFButton(Vector2 position)
         {
-            this.rect = new Rect(position, DefaultSize);
+            this.DrawRect = new Rect(position, DefaultSize);
         }
 
         public UFButton(UFControl parent)
         {
-            this.rect = new Rect(parent.DrawRect.position + DefaultOffset, DefaultSize);
+            this.DrawRect = new Rect(parent.DrawRect.position + DefaultOffset, DefaultSize);
         }
 
         public override void WriteCode(CodeBuilder builder)
         {
-            builder.WriteLine("this." + this.Name + " = new UFButton(new Vector2(" + this.rect.x.ToString() + ", " + this.rect.y.ToString() + "));");
+            builder.WriteLine("this." + this.Name + " = new UFButton();");
             base.WriteCode(builder);
         }
 

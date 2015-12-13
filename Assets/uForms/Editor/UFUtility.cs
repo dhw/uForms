@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -9,6 +6,29 @@ namespace uForms
 {
     class UFUtility
     {
+        /// <summary>Import the xml.</summary>
+        /// <typeparam name="T">type of the import object</typeparam>
+        /// <param name="xmlPath">import xml path</param>
+        /// <param name="encoding">encoding of the xml</param>
+        /// <returns>if any errors, return default(T)</returns>
+        public static T ImportXml<T>(string xmlPath, Encoding encoding = null, XmlAttributeOverrides attrOverride = null)
+        {
+            if(encoding == null) { encoding = new UTF8Encoding(true); }
+
+            try
+            {
+                using(StreamReader sr = new StreamReader(xmlPath, encoding))
+                {
+                    XmlSerializer xs = new XmlSerializer(typeof(T), attrOverride);
+                    return (T)xs.Deserialize(sr);
+                }
+            }
+            catch
+            {
+                return default(T);
+            }
+        }
+
         /// <summary>Export the specified object as xml file.</summary>
         /// <typeparam name="T">type of the export object</typeparam>
         /// <param name="xmlPath">export xml path</param>

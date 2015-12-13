@@ -13,7 +13,7 @@ namespace uForms
 
         public override void DrawByRect()
         {
-            GUI.Label(this.rect, this.text);
+            GUI.Label(this.DrawRect, this.text);
         }
 
         public override void DrawDesign()
@@ -23,7 +23,7 @@ namespace uForms
 
         public override void DrawDesignByRect()
         {
-            GUI.Label(this.rect, this.text);
+            GUI.Label(this.DrawRect, this.text);
         }
 
         public UFLabel()
@@ -31,12 +31,12 @@ namespace uForms
 
         public UFLabel(Vector2 position)
         {
-            this.rect = new Rect(position, DefaultSize);
+            this.DrawRect = new Rect(position, DefaultSize);
         }
 
         public override void WriteCode(CodeBuilder builder)
         {
-            builder.WriteLine("this." + this.Name + " = new UFLabel(new Vector2(" + this.rect.x.ToString() + ", " + this.rect.y.ToString() + "));");
+            builder.WriteLine("this." + this.Name + " = new UFLabel();");
             base.WriteCode(builder);
         }
 

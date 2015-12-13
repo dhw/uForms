@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace uForms.Editor.View
+namespace uForms
 {
     public class OutlineView : EditorWindow
     {
@@ -29,6 +29,8 @@ namespace uForms.Editor.View
             if(UFSelection.ActiveControl != null)
             {
                 Debug.Log("delete : " + UFSelection.ActiveControl.Name);
+                UFSelection.ActiveControl.RemoveFromTree();
+                UFSelection.ActiveControl = null;
             }
         }
 
@@ -56,6 +58,7 @@ namespace uForms.Editor.View
 
         void OnEnable()
         {
+            UFStudio.Initialize();
         }
         
         void OnGUI()
@@ -65,33 +68,15 @@ namespace uForms.Editor.View
                 this.menu.ShowAsContext();
             }
 
-            GUILayout.BeginHorizontal();
-            {
-                GUILayout.Label(" ");
-                if(GUILayout.Button(UFContent.VisibleSwitch, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(16)))
-                {
-                    bool allHidden = !UFStudio.project.root.IsHidden;
-                    UFStudio.project.root.ForTree(node => node.IsHidden = allHidden);
-                }
-
-                if(GUILayout.Button(UFContent.LockSwitch, EditorStyles.label, GUILayout.Width(20), GUILayout.Height(16)))
-                {
-                    bool allLock = !UFStudio.project.root.IsLocked;
-                    UFStudio.project.root.ForTree(node => node.IsLocked = allLock);
-                }
-            }
-            GUILayout.EndHorizontal();
-
-            GUILayout.Space(20);
-
-            this.drawList = UFStudio.project.root.GetOutlineDrawList();
+            this.drawList = new List<UFControl>();
+            UFStudio.project.Controls.ForEach(child => child.GetOutlineDrawListInternal(this.drawList));
 
             BeginWindows();
             {
                 bool anyControlSelected = false;
                 for(int i = 0; i < this.drawList.Count; ++i)
                 {
-                    Rect rect = new Rect(0, 40 + (i * 16), this.position.width, 16);
+                    Rect rect = new Rect(0, (i * 16), this.position.width, 16);
 
                     string style = (UFSelection.ActiveControl == this.drawList[i]) ? "LODSliderRangeSelected" : "LODSliderText";
                     
@@ -159,7 +144,7 @@ namespace uForms.Editor.View
             //GUI.DragWindow();
             if(GUI.changed)
             {
-                UFStudio.Repaint();
+                UFStudio.RepaintAll();
             }
         }
     }

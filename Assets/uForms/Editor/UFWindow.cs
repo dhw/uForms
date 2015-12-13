@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace uForms
 {
-    /// <summary></summary>
     public class UFWindow : EditorWindow
     {
         private List<UFControl> controls = new List<UFControl>();
@@ -16,7 +15,6 @@ namespace uForms
             }
         }
 
-        /// <summary>ウィンドウの描画処理</summary>
         private void OnGUI()
         {
             if(this.controls == null) { return; }

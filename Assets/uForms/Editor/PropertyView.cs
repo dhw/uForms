@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace uForms.Editor.View
+namespace uForms
 {
     public class PropertyView : EditorWindow
     {
@@ -15,11 +15,6 @@ namespace uForms.Editor.View
             if(UFSelection.ActiveControl != null)
             {
                 UFSelection.ActiveControl.DrawProperty();
-            }
-
-            if(GUILayout.Button("Test"))
-            {
-                CodeBuilder.Build(null);
             }
         }
     }

@@ -26,7 +26,7 @@ namespace uForms
 
         public UFControl(Rect rect)
         {
-            this.rect = rect;
+            this.DrawRect = rect;
         }
 
         public string Name
@@ -63,16 +63,38 @@ namespace uForms
         protected UFControl parent = null;
 
         public List<UFControl> childList = new List<UFControl>();
-        [XmlIgnore]
-        protected Rect rect = new Rect(0,0,100,100);
         
-        public Rect DrawRect { get { return this.rect; } }
+        public Rect DrawRect = new Rect(0,0,100,100);
 
         public Rect DrawRectWithGuide
         {
             get
             {
-                return new Rect(this.rect.x - GuideSize, this.rect.y - GuideSize, this.rect.width + (GuideSize * 2), this.rect.height + (GuideSize * 2));
+                return new Rect(this.DrawRect.x - GuideSize, this.DrawRect.y - GuideSize, this.DrawRect.width + (GuideSize * 2), this.DrawRect.height + (GuideSize * 2));
+            }
+        }
+
+        public Vector2 parentPosition
+        {
+            get
+            {
+                if(this.parent != null)
+                {
+                    return this.parent.parentPosition + this.parent.DrawRect.position;
+                }
+                return Vector2.zero;
+            }
+        }
+
+        public Vector2 grobalPosition
+        {
+            get
+            {
+                if(this.parent != null)
+                {
+                    return this.parent.grobalPosition + this.DrawRect.position;
+                }
+                return this.DrawRect.position;
             }
         }
 
@@ -154,6 +176,11 @@ namespace uForms
             }
         }
 
+        public void RefleshHierarchy()
+        {
+            this.childList.ForEach(child => child.parent = this);
+        }
+
         public void Add(UFControl child)
         {
             child.parent = this;
@@ -167,7 +194,7 @@ namespace uForms
             return list;
         }
 
-        private void GetOutlineDrawListInternal(List<UFControl> list)
+        public void GetOutlineDrawListInternal(List<UFControl> list)
         {
             list.Add(this);
             if(this.foldout)
@@ -193,6 +220,14 @@ namespace uForms
                     this.childList[i].ForTreeFromChild(action);
                 }
                 action(this);
+            }
+        }
+
+        public void RemoveFromTree()
+        {
+            if(this.parent != null)
+            {
+                this.parent.childList.Remove(this);
             }
         }
 
@@ -229,7 +264,7 @@ namespace uForms
             GUILayout.EndScrollView();
             if(GUI.changed)
             {
-                UFStudio.Repaint();
+                UFStudio.RepaintAll();
             }
         }
 
@@ -251,36 +286,17 @@ namespace uForms
 
         public void DrawGuide()
         {
-            Rect prev = this.rect;
-            this.rect = GUI.Window(-1, this.rect, DrawGuideRect, "", "grey_border");
+            Rect prev = new Rect(this.grobalPosition, this.DrawRect.size);
+            Rect current = GUI.Window(-1, prev, DrawGuideRect, "", "grey_border");
 
-
-            float sx = this.rect.x;
-            float cx = this.rect.center.x;
-            float ex = this.rect.x + this.rect.width;
-            float sy = this.rect.y;
-            float cy = this.rect.center.y;
-            float ey = this.rect.y + this.rect.height;
+            float sx = current.x;
+            float cx = current.center.x;
+            float ex = current.x + current.width;
+            float sy = current.y;
+            float cy = current.center.y;
+            float ey = current.y + current.height;
             
             Rect[] guides = new Rect[GuideNum];
-            /*
-            guides[0].x = sx - margin;
-            guides[0].y = sy - margin;
-            guides[1].x = cx - margin;
-            guides[1].y = sy - margin;
-            guides[2].x = ex - margin;
-            guides[2].y = sy - margin;
-            guides[3].x = ex - margin;
-            guides[3].y = cy - margin;
-            guides[4].x = ex - margin;
-            guides[4].y = ey - margin;
-            guides[5].x = cx - margin;
-            guides[5].y = ey - margin;
-            guides[6].x = sx - margin;
-            guides[6].y = ey - margin;
-            guides[7].x = sx - margin;
-            guides[7].y = cy - margin;
-            */
             guides[0].x = sx - GuideSize;
             guides[0].y = sy - GuideSize;
             guides[1].x = cx - GuideMargin;
@@ -325,45 +341,44 @@ namespace uForms
                     switch(i)
                     {
                         case 0:
-                            this.rect.width += sx - rx;
-                            this.rect.height += sy - ry;
-                            this.rect.x = rx;
-                            this.rect.y = ry;
+                            current.width += sx - rx;
+                            current.height += sy - ry;
+                            current.x = rx;
+                            current.y = ry;
                             break;
                         case 1:
-                            this.rect.height += sy - ry;
-                            this.rect.y = ry;
+                            current.height += sy - ry;
+                            current.y = ry;
                             break;
                         case 2:
-                            this.rect.width += rx - ex;
-                            this.rect.height += sy - ry;
-                            this.rect.y = ry;
+                            current.width += rx - ex;
+                            current.height += sy - ry;
+                            current.y = ry;
                             break;
                         case 3:
-                            this.rect.width += rx - ex;
+                            current.width += rx - ex;
                             break;
                         case 4:
-                            this.rect.width += rx - ex;
-                            this.rect.height += ry - ey;
+                            current.width += rx - ex;
+                            current.height += ry - ey;
                             break;
                         case 5:
-                            this.rect.height += ry - ey;
+                            current.height += ry - ey;
                             break;
                         case 6:
-                            this.rect.width += sx - rx;
-                            this.rect.height += ry - ey;
-                            this.rect.x = rx;
+                            current.width += sx - rx;
+                            current.height += ry - ey;
+                            current.x = rx;
                             break;
                         case 7:
-                            this.rect.width += sx - rx;
-                            this.rect.x = rx;
+                            current.width += sx - rx;
+                            current.x = rx;
                             break;
                     }
                 }
             }
-            Vector2 delta = this.rect.position - prev.position;
-
-            this.childList.ForEach(child => child.ForTree(node => node.Move(delta)));
+            Vector2 delta = current.position - prev.position;
+            this.DrawRect = new Rect(this.DrawRect.position + delta, current.size);
         }
 
         private void DrawGuideRect(int id)
@@ -373,7 +388,7 @@ namespace uForms
 
         private void Move(Vector2 delta)
         {
-            this.rect.position += delta;
+            this.DrawRect.position += delta;
         }
 
         public virtual void WriteCode(CodeBuilder builder)
@@ -382,6 +397,11 @@ namespace uForms
             builder.WriteLine("this." + this.Name + ".Name = \"" + this.Name + "\";");
             builder.WriteLine("this." + this.Name + ".IsEnabled = " + (this.IsEnabled ? "true" : "false") + ";");
             builder.WriteLine("this." + this.Name + ".IsHidden = " + (this.IsHidden ? "true" : "false") + ";");
+            builder.WriteLine("this." + this.Name + ".DrawRect = new Rect(" +
+                this.DrawRect.x.ToString() + "f, " +
+                this.DrawRect.y.ToString() + "f, " +
+                this.DrawRect.width.ToString() + "f, " +
+                this.DrawRect.height.ToString() + "f);");
         }
         
         public virtual void WriteDefinitionCode(CodeBuilder builder)

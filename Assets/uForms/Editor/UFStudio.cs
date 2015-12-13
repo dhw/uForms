@@ -1,82 +1,120 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using uForms.Editor.View;
-using uForms.Editor.Control;
+using System.IO;
 
 namespace uForms
 {
     /// <summary></summary>
-    public class UFStudio
+    public class UFStudio : EditorWindow
     {
+        private const string TempXmlPath = "Data/UFStudio/~temp.xml";
+
         private static DesignerView designer = null;
-
         private static OutlineView outline = null;
-
         private static PropertyView property = null;
-
+        private static UFStudio studio = null;
         public static UFProject project { get; private set; }
-        
+
         [MenuItem("Window/uForms Studio")]
         public static void OpenStudio()
         {
+            studio = GetWindow<UFStudio>("uForms Studio");
+            designer = DesignerView.OpenWindow();
+            outline = OutlineView.OpenWindow();
+            property = PropertyView.OpenWindow();
+        }
+
+        void OnEnable()
+        {
+            studio = this;
             designer = DesignerView.OpenWindow();
             outline = OutlineView.OpenWindow();
             property = PropertyView.OpenWindow();
 
-            UFSelection.OnSelectionChange += (ctrl) =>
+            UFSelection.OnSelectionChange += (control) =>
             {
-                Repaint();
+                RepaintAll();
             };
 
-            var pRect = property.position;
-            pRect.x = pRect.y = 100;
-            property.position = pRect;
-
-            var oRect = outline.position;
-            oRect.x = pRect.x + pRect.width;
-            oRect.y = pRect.y;
-            outline.position = oRect;
-
-            var dRect = designer.position;
-            dRect.x = oRect.x + oRect.width;
-            dRect.y = oRect.y;
-            designer.position = dRect;
-
-            // テストプロジェクト
-            project = new UFProject();
-
-            UFStackPanel sp = new UFStackPanel(project.root);
-            sp.direction = StackDirection.Horizontal;
-            UFLabel label = new UFLabel(Vector2.zero);
-            label.Text = "テストラベル";
-            UFButton button = new UFButton(sp);
-            button.Text = "テスト";
-            sp.Name = "StackPanel";
-            label.Name = "Label";
-            button.Name = "Button";
-            sp.Add(label);
-            sp.Add(button);
-            project.root.Name = "Window";
-            //project.rootWindow.AddChild(sp);
-
-            UFCanvas canvas = new UFCanvas(project.root);
-            canvas.Name = "Canvas1";
-            project.root.Add(canvas);
-            UFButton button2 = new UFButton(canvas);
-            button2.Text = "テストA";
-            button2.Name = "Button1";
-            canvas.Add(button2);
-            UFButton button3 = new UFButton(canvas);
-            button3.Text = "テストB";
-            button3.Name = "Button2";
-            canvas.Add(button3);
+            Initialize();
         }
 
-        public static void Repaint()
+        void OnDisable()
+        {
+            project.ExportXml(TempXmlPath);
+            UFSelection.OnSelectionChange = null;
+            UFSelection.ActiveControl = null;
+            studio = null;
+            designer = null;
+            outline = null;
+            property = null;
+        }
+
+        void OnDestroy()
+        {
+            if(designer != null)
+            {
+                designer.Close();
+                designer = null;
+            }
+            if(outline != null)
+            {
+                outline.Close();
+                outline = null;
+            }
+            if(property != null)
+            {
+                property.Close();
+                property = null;
+            }
+        }
+
+        public static void Initialize()
+        {
+            if(File.Exists(TempXmlPath))
+            {
+                project = UFProject.CreateFromXml(TempXmlPath);
+            }
+            else
+            {
+                project = new UFProject();
+                project.className = "HidakaEditor";
+                project.nameSpace = "hidaka";
+
+                UFCanvas canvas1 = new UFCanvas();
+                canvas1.Text = "canvas1";
+                canvas1.Name = "canvas1";
+                project.Controls.Add(canvas1);
+                UFButton button1 = new UFButton(new Vector2(5, 60));
+                button1.Text = "テストA";
+                button1.Name = "button1";
+                canvas1.Add(button1);
+                UFLabel label1 = new UFLabel(new Vector2(5, 20));
+                label1.Text = "テストB";
+                label1.Name = "label1";
+                canvas1.Add(label1);
+            }
+        }
+
+        public static void RepaintAll()
         {
             property.Repaint();
             designer.Repaint();
             outline.Repaint();
+            studio.Repaint();
+        }
+
+        void OnGUI()
+        {
+            if(GUILayout.Button("Export Code"))
+            {
+                string path = EditorUtility.SaveFilePanel("コードの出力先を選択", "Assets/Editor", project.className, "cs");
+                if(!string.IsNullOrEmpty(path) && path.Contains("/Editor/"))
+                {
+                    project.ExportCode(path);
+                    Debug.Log(path);
+                }
+            }
         }
     }
 }

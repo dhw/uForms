@@ -11,25 +11,29 @@ namespace uForms
 
         public UFCanvas()
         {
-            this.rect = DefaultRect;
+            this.DrawRect = DefaultRect;
         }
 
         public UFCanvas(UFControl parent)
         {
-            this.rect = new Rect(parent.DrawRect.position, DefaultSize);
+            this.DrawRect = new Rect(parent.DrawRect.position, DefaultSize);
         }
 
         public override void Draw()
         {
             if(IsHidden) { return; }
+            GUI.BeginGroup(this.DrawRect);
             this.childList.ForEach(child => child.DrawByRect());
+            GUI.EndGroup();
         }
 
         public override void DrawDesign()
         {
             if(IsHidden) { return; }
-            GUI.Label(this.rect, "", "GroupBox");
+            GUI.Label(this.DrawRect, "", "GroupBox");
+            GUI.BeginGroup(this.DrawRect);
             this.childList.ForEach(child => child.DrawDesignByRect());
+            GUI.EndGroup();
         }
 
         public override void WriteCode(CodeBuilder builder)

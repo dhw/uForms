@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace uForms.Editor.Control
+namespace uForms
 {
     public enum StackDirection
     {
@@ -13,18 +13,21 @@ namespace uForms.Editor.Control
     {
         public StackDirection direction = StackDirection.Vertical;
 
+        public UFStackPanel()
+        {
+        }
+
         public UFStackPanel(UFControl parent, StackDirection direction = StackDirection.Vertical)
         {
             if(direction == StackDirection.Vertical)
             {
-                this.rect = new Rect(parent.DrawRect.x, parent.DrawRect.y, parent.DrawRect.width, 100);
+                this.DrawRect = new Rect(parent.DrawRect.x, parent.DrawRect.y, parent.DrawRect.width, 100);
             }
             else
             {
-                this.rect = new Rect(parent.DrawRect.x, parent.DrawRect.y, 100, parent.DrawRect.height);
+                this.DrawRect = new Rect(parent.DrawRect.x, parent.DrawRect.y, 100, parent.DrawRect.height);
             }
         }
-
 
         public override void DrawDesign()
         {

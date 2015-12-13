@@ -12,7 +12,7 @@ namespace uForms
 
         public UFRoot(Vector2 size)
         {
-            this.rect = new Rect(Vector2.zero, size);
+            this.DrawRect = new Rect(Vector2.zero, size);
         }
         
         public void DrawTree()

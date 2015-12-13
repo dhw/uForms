@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace uForms.Editor
+namespace uForms
 {
     public class UFContent
     {
