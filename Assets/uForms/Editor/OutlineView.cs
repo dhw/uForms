@@ -12,6 +12,12 @@ namespace uForms
 
         void Awake()
         {
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            menu = new GenericMenu();
             menu.AddItem(new GUIContent("Delete"), false, OnMenuDelete);
             menu.AddItem(new GUIContent("Add/Button"), false, OnMenuAdd, "Button");
             menu.AddItem(new GUIContent("Add/Label"), false, OnMenuAdd, "Label");
@@ -64,7 +70,7 @@ namespace uForms
             }
 
             this.drawList = new List<UFControl>();
-             UFStudio.project.Controls.ForEach(child => child.GetOutlineDrawListInternal(this.drawList));
+            UFStudio.project.Controls.ForEach(child => child.GetOutlineDrawListInternal(this.drawList));
 
             BeginWindows();
             {
