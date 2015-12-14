@@ -6,7 +6,7 @@ namespace uForms
 {
     public class UFStudio : SingletonWindow<UFStudio>
     {
-        private const string TempXmlPath = "Data/UFStudio/~temp.xml";
+        private const string TempXmlPath = "Temp/UFStudio/~temp.xml";
         
         public static UFProject project { get; private set; }
 
