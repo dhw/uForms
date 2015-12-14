@@ -277,7 +277,7 @@ namespace uForms
         {
             GUILayout.BeginHorizontal(EditorStyles.textArea);
             {
-                GUILayout.Label(label, GUILayout.Width(100));
+                GUILayout.Label(label, GUILayout.Width(150));
                 drawAction();
             }
             GUILayout.EndHorizontal();
