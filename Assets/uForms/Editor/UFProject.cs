@@ -178,15 +178,11 @@ namespace uForms
             project.nameSpace = t.Namespace;
             project.className = t.Name;
 
-            var instance = Activator.CreateInstance(t);
-            //var method = t.GetMethod("InitializeComponent", BindingFlags.NonPublic | BindingFlags.Instance);
-            //method.Invoke(instance, null);
-
-            var window = instance as UFWindow;
+            var window = EditorWindow.CreateInstance(t) as UFWindow;
             project.Controls.AddRange(window.Controls);
-
             project.Controls.ForEach(child => child.RefleshHierarchy());
-
+            EditorWindow.DestroyImmediate(window);
+            
             return project;
         }
     }
