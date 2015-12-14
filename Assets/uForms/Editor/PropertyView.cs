@@ -3,13 +3,8 @@ using UnityEngine;
 
 namespace uForms
 {
-    public class PropertyView : EditorWindow
+    public class PropertyView : SingletonWindow<PropertyView>
     {
-        public static PropertyView OpenWindow()
-        {
-            return GetWindow<PropertyView>("Property");
-        }
-        
         void OnGUI()
         {
             if(UFSelection.ActiveControl != null)

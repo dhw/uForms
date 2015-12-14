@@ -4,15 +4,8 @@ using UnityEngine;
 
 namespace uForms
 {
-    public class OutlineView : EditorWindow
+    public class OutlineView : SingletonWindow<OutlineView>
     {
-        public static OutlineView OpenWindow()
-        {
-            var window = GetWindow<OutlineView>("Outline");
-            window.minSize = new Vector2(300, 200);
-            return window;
-        }
-
         List<UFControl> drawList = null;
 
         GenericMenu menu = new GenericMenu();
@@ -54,11 +47,6 @@ namespace uForms
                     current.Add(label);
                     break;
             }
-        }
-
-        void OnEnable()
-        {
-            UFStudio.Initialize();
         }
         
         void OnGUI()

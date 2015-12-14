@@ -3,13 +3,8 @@ using UnityEngine;
 
 namespace uForms
 {
-    public class DesignerView : EditorWindow
-    {
-        public static DesignerView OpenWindow()
-        {
-            return GetWindow<DesignerView>("Designer");
-        }
-
+    public class DesignerView : SingletonWindow<DesignerView>
+    {        
         void Awake()
         {
             this.wantsMouseMove = true;

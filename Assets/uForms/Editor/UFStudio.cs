@@ -4,73 +4,38 @@ using System.IO;
 
 namespace uForms
 {
-    /// <summary></summary>
-    public class UFStudio : EditorWindow
+    public class UFStudio : SingletonWindow<UFStudio>
     {
         private const string TempXmlPath = "Data/UFStudio/~temp.xml";
-
-        private static DesignerView designer = null;
-        private static OutlineView outline = null;
-        private static PropertyView property = null;
-        private static UFStudio studio = null;
+        
         public static UFProject project { get; private set; }
 
         [MenuItem("Window/uForms Studio")]
         public static void OpenStudio()
         {
-            studio = GetWindow<UFStudio>("uForms Studio");
-            designer = DesignerView.OpenWindow();
-            outline = OutlineView.OpenWindow();
-            property = PropertyView.OpenWindow();
+            OpenWindowIfNotExists();
+            DesignerView.OpenWindowIfNotExists();
+            OutlineView.OpenWindowIfNotExists();
+            PropertyView.OpenWindowIfNotExists();
         }
 
-        void OnEnable()
+        public static void RepaintAll()
         {
-            studio = this;
-            designer = DesignerView.OpenWindow();
-            outline = OutlineView.OpenWindow();
-            property = PropertyView.OpenWindow();
+            Instance.Repaint();
+            OutlineView.Instance.Repaint();
+            DesignerView.Instance.Repaint();
+            PropertyView.Instance.Repaint();
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
 
             UFSelection.OnSelectionChange += (control) =>
             {
                 RepaintAll();
             };
 
-            Initialize();
-        }
-
-        void OnDisable()
-        {
-            project.ExportXml(TempXmlPath);
-            UFSelection.OnSelectionChange = null;
-            UFSelection.ActiveControl = null;
-            studio = null;
-            designer = null;
-            outline = null;
-            property = null;
-        }
-
-        void OnDestroy()
-        {
-            if(designer != null)
-            {
-                designer.Close();
-                designer = null;
-            }
-            if(outline != null)
-            {
-                outline.Close();
-                outline = null;
-            }
-            if(property != null)
-            {
-                property.Close();
-                property = null;
-            }
-        }
-
-        public static void Initialize()
-        {
             if(File.Exists(TempXmlPath))
             {
                 project = UFProject.CreateFromXml(TempXmlPath);
@@ -96,19 +61,27 @@ namespace uForms
             }
         }
 
-        public static void RepaintAll()
+        protected override void OnDisable()
         {
-            property.Repaint();
-            designer.Repaint();
-            outline.Repaint();
-            studio.Repaint();
+            base.OnDisable();
+
+            project.ExportXml(TempXmlPath);
+            UFSelection.OnSelectionChange = null;
+            UFSelection.ActiveControl = null;
+        }
+
+        void OnDestroy()
+        {
+            OutlineView.CloseIfExists();
+            DesignerView.CloseIfExists();
+            PropertyView.CloseIfExists();
         }
 
         void OnGUI()
         {
             if(GUILayout.Button("Export Code"))
             {
-                string path = EditorUtility.SaveFilePanel("コードの出力先を選択", "Assets/Editor", project.className, "cs");
+                string path = EditorUtility.SaveFilePanel("Choice the save path", "Assets/Editor", project.className, "cs");
                 if(!string.IsNullOrEmpty(path) && path.Contains("/Editor/"))
                 {
                     project.ExportCode(path);
