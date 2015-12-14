@@ -4,8 +4,9 @@ namespace uForms
 {
     public class CodeBuilder
     {
-        int indent = 0;
-        StringBuilder builder = new StringBuilder();
+        private int indent = 0;
+
+        private StringBuilder builder = new StringBuilder();
 
         public int Indent
         {
@@ -23,7 +24,11 @@ namespace uForms
         {
             this.AddIndent();
             this.builder.Append(line + "\r\n");
-
+        }
+        
+        public string GetCode()
+        {
+            return this.builder.ToString();
         }
 
         private void AddIndent()
@@ -32,11 +37,6 @@ namespace uForms
             {
                 this.builder.Append("    ");
             }
-        }
-
-        public string GetCode()
-        {
-            return this.builder.ToString();
         }
     }
 }
