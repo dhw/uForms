@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Xml.Serialization;
+using UnityEditor;
 using UnityEngine;
 
 namespace uForms
@@ -7,11 +8,13 @@ namespace uForms
     {
         public static readonly Vector2 DefaultSize = new Vector2(100, 16);
 
+        [XmlIgnore]
         public System.Action<UnityEngine.Object> OnTargetChanged = null;
 
         private UnityEngine.Object target = null;
         private bool allowSceneObject = true;
 
+        [XmlIgnore]
         public UnityEngine.Object Target
         {
             get
@@ -30,7 +33,7 @@ namespace uForms
                 }
             }
         }
-
+        
         public bool AllowSceneObject
         {
             get
