@@ -15,6 +15,7 @@ namespace uForms
             menu.AddItem(new GUIContent("Delete"), false, OnMenuDelete);
             menu.AddItem(new GUIContent("Add/Button"), false, OnMenuAdd, "Button");
             menu.AddItem(new GUIContent("Add/Label"), false, OnMenuAdd, "Label");
+            menu.AddItem(new GUIContent("Add/ObjectField"), false, OnMenuAdd, "ObjectField");
         }
 
         private void OnMenuDelete()
@@ -36,15 +37,21 @@ namespace uForms
             {
                 case "Button":
                     var button = new UFButton(current);
-                    button.Name = "HogeButton";
-                    button.Text = "Hoge";
+                    button.Name = "button";
+                    button.Text = "button";
                     current.Add(button);
                     break;
                 case "Label":
                     var label = new UFLabel(Vector2.zero);
-                    label.Name = "HogeButton";
-                    label.Text = "Hoge";
+                    label.Name = "label";
+                    label.Text = "label";
                     current.Add(label);
+                    break;
+                case "ObjectField":
+                    var objectField= new UFObjectField();
+                    objectField.Name = "objectField";
+                    objectField.Text = "objectField";
+                    current.Add(objectField);
                     break;
             }
         }
@@ -57,7 +64,7 @@ namespace uForms
             }
 
             this.drawList = new List<UFControl>();
-            UFStudio.project.Controls.ForEach(child => child.GetOutlineDrawListInternal(this.drawList));
+             UFStudio.project.Controls.ForEach(child => child.GetOutlineDrawListInternal(this.drawList));
 
             BeginWindows();
             {
