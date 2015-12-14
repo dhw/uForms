@@ -13,9 +13,10 @@ namespace uForms
     public class UFProject
     {
         public string nameSpace = "sample";
+
         public string className = "SampleEditor";
+
         public List<UFControl> Controls = new List<UFControl>();
-        //public UFRoot root = new UFRoot(new Vector2(400,400));
 
         public void ExportCode(string codePath)
         {
@@ -113,18 +114,8 @@ namespace uForms
 
         public void ExportXml(string xmlPath)
         {
-            var attrOverride = new XmlAttributeOverrides(); //属性上書き情報
-
-            var attributes = new XmlAttributes();       //属性のリスト
-
-            //リフレクションを使用してClassList.Childrenの既存属性[XmlArrayItem]を列挙して追加
-            //var info = typeof(UFControl).GetMember("childList")[0];
-            //var originalAttrs = Attribute.GetCustomAttributes(info, typeof(XmlArrayItemAttribute));
-            //foreach(var attr in originalAttrs)
-            //{
-            //    attributes.XmlArrayItems.Add(attr as XmlArrayItemAttribute);
-            //}
-
+            var attrOverride = new XmlAttributeOverrides();
+            var attributes = new XmlAttributes();
             var ase = Assembly.GetAssembly(typeof(UFControl));
             var list = ase.GetTypes()
                 .Where(t => t.BaseType == typeof(UFControl))
@@ -148,8 +139,8 @@ namespace uForms
 
         public static UFProject CreateFromXml(string xmlPath)
         {
-            var attributes = new XmlAttributes();       //属性のリスト
-            var attrOverride = new XmlAttributeOverrides(); //属性上書き情報
+            var attributes = new XmlAttributes();
+            var attrOverride = new XmlAttributeOverrides();
             var ase = Assembly.GetAssembly(typeof(UFControl));
             var list = ase.GetTypes()
                 .Where(t => t.BaseType == typeof(UFControl))
