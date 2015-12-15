@@ -11,6 +11,10 @@ namespace uForms
             {
                 UFSelection.ActiveControl.DrawProperty();
             }
+            else
+            {
+                UFProject.Current.DrawProperty();
+            }
         }
     }
 }

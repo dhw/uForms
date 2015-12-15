@@ -183,5 +183,11 @@ namespace uForms
                 AssetDatabase.ImportAsset(designerCodePath);
             }
         }
+
+        public void DrawProperty()
+        {
+            this.Namespace = EditorGUILayout.TextField("Namespace", this.Namespace);
+            this.ClassName = EditorGUILayout.TextField("ClassName", this.ClassName);
+        }
     }
 }
