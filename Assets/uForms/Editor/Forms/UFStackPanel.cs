@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace uForms
 {
-    public enum StackDirection
+    public enum Orientation
     {
         Vertical,
         Horizontal
@@ -11,15 +11,15 @@ namespace uForms
 
     public class UFStackPanel : UFControl
     {
-        public StackDirection direction = StackDirection.Vertical;
+        public Orientation direction = Orientation.Vertical;
 
         public UFStackPanel()
         {
         }
 
-        public UFStackPanel(UFControl parent, StackDirection direction = StackDirection.Vertical)
+        public UFStackPanel(UFControl parent, Orientation direction = Orientation.Vertical)
         {
-            if(direction == StackDirection.Vertical)
+            if(direction == Orientation.Vertical)
             {
                 this.DrawRect = new Rect(parent.DrawRect.x, parent.DrawRect.y, parent.DrawRect.width, 100);
             }
@@ -31,7 +31,7 @@ namespace uForms
 
         public override void DrawDesign()
         {
-            if(direction == StackDirection.Horizontal)
+            if(direction == Orientation.Horizontal)
             {
                 GUILayout.BeginHorizontal();
                 {
@@ -53,7 +53,7 @@ namespace uForms
         {
             DrawPropertyItem("StackDirection", () =>
             {
-                this.direction = (StackDirection)EditorGUILayout.EnumPopup(this.direction);
+                this.direction = (Orientation)EditorGUILayout.EnumPopup(this.direction);
             });
         }
     }
