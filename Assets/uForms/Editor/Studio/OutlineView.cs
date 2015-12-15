@@ -149,14 +149,8 @@ namespace uForms
                 current.IsHidden = !current.IsHidden;
             }
 
-            GUIContent lockContent = (current.IsLocked ? UFContent.LockSwitch : UFContent.Minus);
-            if(GUILayout.Button(lockContent, EditorStyles.label, GUILayout.Width(20)))
-            {
-                current.IsLocked = !current.IsLocked;
-            }
-
             GUILayout.EndHorizontal();
-            //GUI.DragWindow();
+
             if(GUI.changed)
             {
                 UFStudio.RepaintAll();

@@ -54,9 +54,9 @@ namespace uForms
         }
 
         private bool isHidden = false;
-        private bool isLocked = false;
 
         private bool isEnabled = true;
+
         private bool foldout = true;
 
         [XmlIgnore]
@@ -131,19 +131,7 @@ namespace uForms
                 this.isHidden = value;
             }
         }
-
-        public bool IsLocked
-        {
-            get
-            {
-                return this.isLocked;
-            }
-            set
-            {
-                this.isLocked = value;
-            }
-        }
-
+        
         public bool Foldout
         {
             get
@@ -215,6 +203,7 @@ namespace uForms
                 this.childList.ForEach(child => child.ForTree(action));
             }
         }
+
         public void ForTreeFromChild(System.Action<UFControl> action)
         {
             if(action != null)
