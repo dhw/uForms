@@ -12,13 +12,80 @@ namespace uForms
     /// <summary></summary>
     public class UFProject
     {
-        public string nameSpace = "sample";
+        private static UFProject current = new UFProject();
 
-        public string className = "SampleEditor";
+        public static UFProject Current { get { return current; } }
+
+        public string Namespace = "Form1";
+
+        public string ClassName = "Form1";
 
         public List<UFControl> Controls = new List<UFControl>();
 
-        public void ExportCode(string codePath)
+        public static void CreateNewProject()
+        {
+            current = new UFProject();
+        }
+
+        public static void ImportXml(string xmlPath)
+        {
+            var assembly = Assembly.GetAssembly(typeof(UFControl));
+
+            var list = assembly.GetTypes()
+                .Where(t => t.BaseType == typeof(UFControl))
+                .ToList();
+            list.Add(typeof(UFControl));
+            list = list.Distinct().ToList();
+
+            var attributes = new XmlAttributes();
+            list.ForEach(t => attributes.XmlArrayItems.Add(new XmlArrayItemAttribute(t)));
+
+            var attrOverride = new XmlAttributeOverrides();
+            attrOverride.Add(typeof(UFControl), "childList", attributes);
+            attrOverride.Add(typeof(UFProject), "Controls", attributes);
+
+            current = UFUtility.ImportXml<UFProject>(xmlPath, attrOverride: attrOverride);
+            current.Controls.ForEach(child => child.RefleshHierarchy());
+        }
+
+        public static void ImportCode(Type t)
+        {
+            if(t.BaseType != typeof(UFWindow))
+            {
+                throw new Exception("Specified type is not derived from 'UFWindow'! - " + t.Name);
+            }
+
+            current = new UFProject();
+            current.Namespace = t.Namespace;
+            current.ClassName = t.Name;
+
+            var window = EditorWindow.CreateInstance(t) as UFWindow;
+            current.Controls.AddRange(window.Controls);
+            current.Controls.ForEach(child => child.RefleshHierarchy());
+            EditorWindow.DestroyImmediate(window);
+        }
+
+        public static void ExportXml(string xmlPath)
+        {
+            List<Type> list = new List<Type>();
+            current.Controls.ForEach(child => child.ForTree(node =>
+            {
+                list.Add(node.GetType());
+            }));
+            list.Add(typeof(UFControl));
+            list = list.Distinct().ToList();
+
+            var attributes = new XmlAttributes();
+            list.ForEach(t => attributes.XmlArrayItems.Add(new XmlArrayItemAttribute(t)));
+
+            var attrOverride = new XmlAttributeOverrides();
+            attrOverride.Add(typeof(UFControl), "childList", attributes);
+            attrOverride.Add(typeof(UFProject), "Controls", attributes);
+
+            UFUtility.ExportXml(xmlPath, current, attrOverride: attrOverride);
+        }
+
+        public static void ExportCode(string codePath)
         {
             string designerCodePath = codePath.Replace(".cs",".Designer.cs");
 
@@ -30,10 +97,10 @@ namespace uForms
                 cb.WriteLine("using uForms;");
                 cb.WriteLine("using UnityEngine;");
                 cb.WriteLine("");
-                cb.WriteLine("namespace " + this.nameSpace);
+                cb.WriteLine("namespace " + current.Namespace);
                 cb.WriteLine("{");
                 cb.Indent++;
-                cb.WriteLine("partial class " + this.className);
+                cb.WriteLine("partial class " + current.ClassName);
                 cb.WriteLine("{");
                 cb.Indent++;
                 cb.WriteLine("#region Auto generated code from uForms.");
@@ -41,7 +108,7 @@ namespace uForms
                 cb.WriteLine("private void InitializeComponent()");
                 cb.WriteLine("{");
                 cb.Indent++;
-                this.Controls.ForEach(child =>
+                current.Controls.ForEach(child =>
                 {
                     child.WriteCode(cb);
                     cb.WriteLine("this.Controls.Add(this." + child.Name + ");");
@@ -51,7 +118,7 @@ namespace uForms
                 cb.WriteLine("");
                 cb.WriteLine("#endregion");
                 cb.WriteLine("");
-                this.Controls.ForEach(child => child.ForTree(node => node.WriteDefinitionCode(cb)));
+                current.Controls.ForEach(child => child.ForTree(node => node.WriteDefinitionCode(cb)));
                 cb.Indent--;
                 cb.WriteLine("}");
                 cb.Indent--;
@@ -71,17 +138,17 @@ namespace uForms
                 cb.WriteLine("using UnityEngine;");
                 cb.WriteLine("using UnityEditor;");
                 cb.WriteLine("");
-                cb.WriteLine("namespace " + this.nameSpace);
+                cb.WriteLine("namespace " + current.Namespace);
                 cb.WriteLine("{");
                 cb.Indent++;
-                cb.WriteLine("public partial class " + this.className + " : UFWindow");
+                cb.WriteLine("public partial class " + current.ClassName + " : UFWindow");
                 cb.WriteLine("{");
                 cb.Indent++;
-                cb.WriteLine("[MenuItem(\"Tools/" + this.className + "\")]");
+                cb.WriteLine("[MenuItem(\"Tools/" + current.ClassName + "\")]");
                 cb.WriteLine("public static void OpenWindow()");
                 cb.WriteLine("{");
                 cb.Indent++;
-                cb.WriteLine("GetWindow<" + this.className + ">();");
+                cb.WriteLine("GetWindow<" + current.ClassName + ">();");
                 cb.Indent--;
                 cb.WriteLine("}");
                 cb.WriteLine("");
@@ -110,71 +177,6 @@ namespace uForms
                 designerCodePath = designerCodePath.Substring(designerCodePath.IndexOf("Assets/"));
                 AssetDatabase.ImportAsset(designerCodePath);
             }
-        }
-
-        public void ExportXml(string xmlPath)
-        {
-            var attrOverride = new XmlAttributeOverrides();
-            var attributes = new XmlAttributes();
-            var ase = Assembly.GetAssembly(typeof(UFControl));
-            var list = ase.GetTypes()
-                .Where(t => t.BaseType == typeof(UFControl))
-                .ToList();
-
-            list.Clear();
-            this.Controls.ForEach(child => child.ForTree(node =>
-            {
-                list.Add(node.GetType());
-            }));
-
-            list.Add(typeof(UFControl));
-            list = list.Distinct().ToList();
-
-            list.ForEach(t => attributes.XmlArrayItems.Add(new XmlArrayItemAttribute(t)));
-            attrOverride.Add(typeof(UFControl), "childList", attributes);
-            attrOverride.Add(typeof(UFProject), "Controls", attributes);
-
-            UFUtility.ExportXml(xmlPath, this, attrOverride: attrOverride);
-        }
-
-        public static UFProject CreateFromXml(string xmlPath)
-        {
-            var attributes = new XmlAttributes();
-            var attrOverride = new XmlAttributeOverrides();
-            var ase = Assembly.GetAssembly(typeof(UFControl));
-            var list = ase.GetTypes()
-                .Where(t => t.BaseType == typeof(UFControl))
-                .ToList();
-            list.Add(typeof(UFControl));
-            list = list.Distinct().ToList();
-
-            list.ForEach(t => attributes.XmlArrayItems.Add(new XmlArrayItemAttribute(t)));
-            attrOverride.Add(typeof(UFControl), "childList", attributes);
-            attrOverride.Add(typeof(UFProject), "Controls", attributes);
-            UFProject project = UFUtility.ImportXml<UFProject>(xmlPath, attrOverride:attrOverride);
-
-            project.Controls.ForEach(child => child.RefleshHierarchy());
-
-            return project;
-        }
-
-        public static UFProject CreateFromType(Type t)
-        {
-            if(t.BaseType != typeof(UFWindow))
-            {
-                throw new Exception("CreateFromTypeException!!");
-            }
-
-            UFProject project = new UFProject();
-            project.nameSpace = t.Namespace;
-            project.className = t.Name;
-
-            var window = EditorWindow.CreateInstance(t) as UFWindow;
-            project.Controls.AddRange(window.Controls);
-            project.Controls.ForEach(child => child.RefleshHierarchy());
-            EditorWindow.DestroyImmediate(window);
-            
-            return project;
         }
     }
 }

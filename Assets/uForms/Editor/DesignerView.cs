@@ -12,14 +12,14 @@ namespace uForms
 
         void OnGUI()
         {
-            if(UFStudio.project == null) { return; }
+            if(UFProject.Current == null) { return; }
 
             if(Event.current.type == EventType.MouseDown)
             {
                 CheckSelection();
             }
 
-            UFStudio.project.Controls.ForEach(child => child.DrawDesign());
+            UFProject.Current.Controls.ForEach(child => child.DrawDesign());
 
             if(UFSelection.ActiveControl != null)
             {
@@ -34,7 +34,7 @@ namespace uForms
             Vector2 click = Event.current.mousePosition;
             bool selected = false;
 
-            UFStudio.project.Controls.ForEach(child => child.ForTreeFromChild(node =>
+            UFProject.Current.Controls.ForEach(child => child.ForTreeFromChild(node =>
             {
                 if(selected) { return; }
                 if(UFSelection.ActiveControl == node)

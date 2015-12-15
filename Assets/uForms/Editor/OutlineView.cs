@@ -77,7 +77,7 @@ namespace uForms
             }
 
             this.drawList = new List<UFControl>();
-            UFStudio.project.Controls.ForEach(child => child.GetOutlineDrawListInternal(this.drawList));
+            UFProject.Current.Controls.ForEach(child => child.GetOutlineDrawListInternal(this.drawList));
 
             BeginWindows();
             {

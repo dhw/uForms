@@ -7,8 +7,6 @@ namespace uForms
     public class UFStudio : SingletonWindow<UFStudio>
     {
         private const string TempXmlPath = "Temp/UFStudio/~temp.xml";
-        
-        public static UFProject project { get; private set; }
 
         public class UIOP
         {
@@ -43,18 +41,18 @@ namespace uForms
 
             if(File.Exists(TempXmlPath))
             {
-                project = UFProject.CreateFromXml(TempXmlPath);
+                UFProject.ImportXml(TempXmlPath);
             }
             else
             {
-                project = new UFProject();
-                project.className = "HidakaEditor";
-                project.nameSpace = "hidaka";
+                UFProject.CreateNewProject();
+                UFProject.Current.ClassName = "HidakaEditor";
+                UFProject.Current.Namespace = "hidaka";
 
                 UFCanvas canvas1 = new UFCanvas();
                 canvas1.Text = "canvas1";
                 canvas1.Name = "canvas1";
-                project.Controls.Add(canvas1);
+                UFProject.Current.Controls.Add(canvas1);
                 UFButton button1 = new UFButton(new Vector2(5, 60));
                 button1.Text = "テストA";
                 button1.Name = "button1";
@@ -70,7 +68,7 @@ namespace uForms
         {
             base.OnDisable();
 
-            project.ExportXml(TempXmlPath);
+            UFProject.ExportXml(TempXmlPath);
             UFSelection.OnSelectionChange = null;
             UFSelection.ActiveControl = null;
         }
@@ -95,7 +93,7 @@ namespace uForms
                 {
                     UFSelector.OpenWindow((t) =>
                     {
-                        project = UFProject.CreateFromType(t);
+                        UFProject.ImportCode(t);
                         UFSelection.ActiveControl = null;
                         RepaintAll();
                     });
@@ -103,10 +101,10 @@ namespace uForms
 
                 if(GUILayout.Button("Export Code", UIOP.Button))
                 {
-                    string path = EditorUtility.SaveFilePanel("Choice the save path", "Assets/Editor", project.className, "cs");
+                    string path = EditorUtility.SaveFilePanel("Choice the save path", "Assets/Editor", UFProject.Current.ClassName, "cs");
                     if(!string.IsNullOrEmpty(path) && path.Contains("/Editor/"))
                     {
-                        project.ExportCode(path);
+                        UFProject.ExportCode(path);
                         Debug.Log(path);
                     }
                 }
