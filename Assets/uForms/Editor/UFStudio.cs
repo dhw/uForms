@@ -10,6 +10,11 @@ namespace uForms
         
         public static UFProject project { get; private set; }
 
+        public class UIOP
+        {
+            public static GUILayoutOption[] Button = {GUILayout.Width(100), GUILayout.Height(100) };
+        }
+
         [MenuItem("Window/uForms Studio")]
         public static void OpenStudio()
         {
@@ -79,24 +84,42 @@ namespace uForms
 
         void OnGUI()
         {
-            if(GUILayout.Button("Export Code"))
+            GUILayout.BeginHorizontal();
             {
-                string path = EditorUtility.SaveFilePanel("Choice the save path", "Assets/Editor", project.className, "cs");
-                if(!string.IsNullOrEmpty(path) && path.Contains("/Editor/"))
+                if(GUILayout.Button("New Form", UIOP.Button))
                 {
-                    project.ExportCode(path);
-                    Debug.Log(path);
-                }
-            }
 
-            if(GUILayout.Button("Import Code"))
-            {
-                UFSelector.OpenWindow((t) =>
+                }
+
+                if(GUILayout.Button("Import Code", UIOP.Button))
                 {
-                    project = UFProject.CreateFromType(t);
-                    UFSelection.ActiveControl = null;
-                    RepaintAll();
-                });
+                    UFSelector.OpenWindow((t) =>
+                    {
+                        project = UFProject.CreateFromType(t);
+                        UFSelection.ActiveControl = null;
+                        RepaintAll();
+                    });
+                }
+
+                if(GUILayout.Button("Export Code", UIOP.Button))
+                {
+                    string path = EditorUtility.SaveFilePanel("Choice the save path", "Assets/Editor", project.className, "cs");
+                    if(!string.IsNullOrEmpty(path) && path.Contains("/Editor/"))
+                    {
+                        project.ExportCode(path);
+                        Debug.Log(path);
+                    }
+                }
+
+                if(GUILayout.Button("Import Xml", UIOP.Button))
+                {
+
+                }
+
+                if(GUILayout.Button("Export Xml", UIOP.Button))
+                {
+
+                }
             }
         }
     }
