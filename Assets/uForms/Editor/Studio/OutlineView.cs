@@ -19,6 +19,7 @@ namespace uForms
             base.OnEnable();
             menu = new GenericMenu();
             menu.AddItem(new GUIContent("Delete"), false, OnMenuDelete);
+            menu.AddItem(new GUIContent("Add/Canvas"), false, OnMenuAdd, "Canvas");
             menu.AddItem(new GUIContent("Add/Button"), false, OnMenuAdd, "Button");
             menu.AddItem(new GUIContent("Add/Label"), false, OnMenuAdd, "Label");
             menu.AddItem(new GUIContent("Add/ObjectField"), false, OnMenuAdd, "ObjectField");
@@ -38,11 +39,29 @@ namespace uForms
 
         private void OnMenuAdd(object type)
         {
-            var current = UFSelection.ActiveControl;
-            if(current == null) { return; }
             string typeString = (string)type;
+            
+            var current = UFSelection.ActiveControl;
+            if(current == null)
+            {
+                if(typeString == "Canvas")
+                {
+                    var canvas = new UFCanvas();
+                    canvas.Name = "canvas";
+                    canvas.Text = "canvas";
+                    UFProject.Current.Controls.Add(canvas);
+                }
+
+                return;
+            }
             switch(typeString)
             {
+                case "Canvas":
+                    var canvas = new UFCanvas();
+                    canvas.Name = "canvas";
+                    canvas.Text = "canvas";
+                    current.Add(canvas);
+                    break;
                 case "Button":
                     var button = new UFButton(current);
                     button.Name = "button";

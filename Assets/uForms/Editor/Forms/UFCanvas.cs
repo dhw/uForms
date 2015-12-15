@@ -20,6 +20,11 @@ namespace uForms
             GUI.EndGroup();
         }
 
+        public override void DrawByRect()
+        {
+            Draw();
+        }
+
         public override void DrawDesign()
         {
             if(IsHidden) { return; }
@@ -27,6 +32,11 @@ namespace uForms
             GUI.BeginGroup(this.DrawRect);
             this.childList.ForEach(child => child.DrawDesignByRect());
             GUI.EndGroup();
+        }
+
+        public override void DrawDesignByRect()
+        {
+            DrawDesign();
         }
 
         public override void WriteCode(CodeBuilder builder)
