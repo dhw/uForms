@@ -153,7 +153,7 @@ namespace uForms
                 cb.WriteLine("public static void OpenWindow()");
                 cb.WriteLine("{");
                 cb.Indent++;
-                cb.WriteLine("GetWindow<" + current.ClassName + ">();");
+                cb.WriteLine("GetWindow<" + current.ClassName + ">(\"" + current.ClassName + "\");");
                 cb.Indent--;
                 cb.WriteLine("}");
                 cb.WriteLine("");
