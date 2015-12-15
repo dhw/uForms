@@ -1,11 +1,20 @@
 ﻿using System.IO;
 using System.Text;
 using System.Xml.Serialization;
+using UnityEditor;
 
 namespace uForms
 {
     class UFUtility
     {
+        public static T LoadAssetFromGUID<T>(string guid) where T : UnityEngine.Object
+        {
+            if(string.IsNullOrEmpty(guid)) { return null; }
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            if(string.IsNullOrEmpty(path)) { return null; }
+            return AssetDatabase.LoadAssetAtPath<T>(path);
+        }
+
         /// <summary>Import the xml.</summary>
         /// <typeparam name="T">type of the import object</typeparam>
         /// <param name="xmlPath">import xml path</param>

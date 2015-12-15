@@ -23,6 +23,7 @@ namespace uForms
             menu.AddItem(new GUIContent("Add/Label"), false, OnMenuAdd, "Label");
             menu.AddItem(new GUIContent("Add/ObjectField"), false, OnMenuAdd, "ObjectField");
             menu.AddItem(new GUIContent("Add/FloatSlider"), false, OnMenuAdd, "FloatSlider");
+            menu.AddItem(new GUIContent("Add/Image"), false, OnMenuAdd, "Image");
         }
 
         private void OnMenuDelete()
@@ -65,6 +66,12 @@ namespace uForms
                     floatSlider.Name = "floatSlider";
                     floatSlider.Text = "floatSlider";
                     current.Add(floatSlider);
+                    break;
+                case "Image":
+                    var image= new UFImage();
+                    image.Name = "image";
+                    image.Text = "image";
+                    current.Add(image);
                     break;
             }
         }

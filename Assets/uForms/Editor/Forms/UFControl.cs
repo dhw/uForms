@@ -176,9 +176,13 @@ namespace uForms
             }
         }
 
-        public void RefleshHierarchy()
+        public virtual void RefleshHierarchy()
         {
-            this.childList.ForEach(child => child.parent = this);
+            this.childList.ForEach(child =>
+            {
+                child.parent = this;
+                child.RefleshHierarchy();
+            });
         }
 
         public void Add(UFControl child)
