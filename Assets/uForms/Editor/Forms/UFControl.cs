@@ -144,6 +144,14 @@ namespace uForms
             }
         }
 
+        public bool HasParent
+        {
+            get
+            {
+                return (this.parent != null);
+            }
+        }
+
         public bool HasChild
         {
             get

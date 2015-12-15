@@ -31,8 +31,14 @@ namespace uForms
         {
             if(UFSelection.ActiveControl != null)
             {
-                Debug.Log("delete : " + UFSelection.ActiveControl.Name);
-                UFSelection.ActiveControl.RemoveFromTree();
+                if(UFSelection.ActiveControl.HasParent)
+                {
+                    UFSelection.ActiveControl.RemoveFromTree();
+                }
+                else
+                {
+                    UFProject.Current.Controls.Remove(UFSelection.ActiveControl);
+                }
                 UFSelection.ActiveControl = null;
             }
         }
