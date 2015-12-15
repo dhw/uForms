@@ -42,6 +42,7 @@ namespace uForms
             base.WriteCode(builder);
             this.childList.ForEach(child =>
             {
+                builder.WriteLine("// " + child.Name);
                 child.WriteCode(builder);
                 builder.WriteLine("this." + this.Name + ".Add(this." + child.Name + ");");
             });

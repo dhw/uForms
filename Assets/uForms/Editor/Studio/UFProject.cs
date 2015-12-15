@@ -110,6 +110,7 @@ namespace uForms
                 cb.Indent++;
                 current.Controls.ForEach(child =>
                 {
+                    cb.WriteLine("// " + child.Name);
                     child.WriteCode(cb);
                     cb.WriteLine("this.Controls.Add(this." + child.Name + ");");
                 });
