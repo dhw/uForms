@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System;
 using System.Reflection;
 
@@ -13,11 +11,13 @@ namespace uForms
     {
         List<Type> typeList = new List<Type>();
 
+        Vector2 scrollPosition = Vector2.zero;
+
         System.Action<Type> OnSelected = null;
 
         public static void OpenWindow(Action<Type> onSelected = null)
         {
-            var window = GetWindow<UFSelector>();
+            var window = GetWindow<UFSelector>("UFSelector");
             window.OnSelected = onSelected;
         }
 
@@ -31,17 +31,21 @@ namespace uForms
 
         void OnGUI()
         {
-            this.typeList.ForEach(t =>
+            this.scrollPosition = GUILayout.BeginScrollView(this.scrollPosition);
             {
-                if(GUILayout.Button(t.Name))
+                this.typeList.ForEach(t =>
                 {
-                    if(OnSelected != null)
+                    if(GUILayout.Button(t.Name))
                     {
-                        this.OnSelected(t);
-                        this.Close();
+                        if(OnSelected != null)
+                        {
+                            this.OnSelected(t);
+                            this.Close();
+                        }
                     }
-                }
-            });
+                });
+            }
+            GUILayout.EndScrollView();
         }
     }
 }
