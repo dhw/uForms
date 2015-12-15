@@ -5,7 +5,7 @@ namespace uForms
     /// <summary></summary>
     public class UFCanvas : UFControl
     {
-        public static readonly Rect DefaultRect = new Rect(0,0,400,400);
+        public static readonly Rect DefaultRect = new Rect(0,0,250,250);
 
         public UFCanvas()
         {
