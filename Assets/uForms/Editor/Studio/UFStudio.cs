@@ -46,21 +46,6 @@ namespace uForms
             else
             {
                 UFProject.CreateNewProject();
-                UFProject.Current.ClassName = "HidakaEditor";
-                UFProject.Current.Namespace = "hidaka";
-
-                UFCanvas canvas1 = new UFCanvas();
-                canvas1.Text = "canvas1";
-                canvas1.Name = "canvas1";
-                UFProject.Current.Controls.Add(canvas1);
-                UFButton button1 = new UFButton(new Vector2(5, 60));
-                button1.Text = "テストA";
-                button1.Name = "button1";
-                canvas1.Add(button1);
-                UFLabel label1 = new UFLabel(new Vector2(5, 20));
-                label1.Text = "テストB";
-                label1.Name = "label1";
-                canvas1.Add(label1);
             }
         }
 
@@ -86,7 +71,8 @@ namespace uForms
             {
                 if(GUILayout.Button("New Form", UIOP.Button))
                 {
-
+                    UFProject.CreateNewProject();
+                    RepaintAll();
                 }
 
                 if(GUILayout.Button("Import Code", UIOP.Button))
@@ -101,22 +87,30 @@ namespace uForms
 
                 if(GUILayout.Button("Export Code", UIOP.Button))
                 {
-                    string path = EditorUtility.SaveFilePanel("Choice the save path", "Assets/Editor", UFProject.Current.ClassName, "cs");
+                    string path = EditorUtility.SaveFilePanel("Select the path to export", "Assets/Editor", UFProject.Current.ClassName, "cs");
                     if(!string.IsNullOrEmpty(path) && path.Contains("/Editor/"))
                     {
                         UFProject.ExportCode(path);
-                        Debug.Log(path);
                     }
                 }
 
                 if(GUILayout.Button("Import Xml", UIOP.Button))
                 {
-
+                    string path = EditorUtility.OpenFilePanel("Select the path to import", "", "xml");
+                    if(!string.IsNullOrEmpty(path) && File.Exists(path))
+                    {
+                        UFProject.ImportXml(path);
+                        RepaintAll();
+                    }
                 }
 
                 if(GUILayout.Button("Export Xml", UIOP.Button))
                 {
-
+                    string path = EditorUtility.SaveFilePanel("Select the path to export", "", UFProject.Current.ClassName, "xml");
+                    if(!string.IsNullOrEmpty(path))
+                    {
+                        UFProject.ExportXml(path);
+                    }
                 }
             }
         }

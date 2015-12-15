@@ -5,18 +5,11 @@ namespace uForms
     /// <summary></summary>
     public class UFCanvas : UFControl
     {
-        public static readonly Rect DefaultRect = new Rect(0,0,100,100);
-
-        public static readonly Vector2 DefaultSize = new Vector2(100, 100);
+        public static readonly Rect DefaultRect = new Rect(0,0,400,400);
 
         public UFCanvas()
         {
             this.DrawRect = DefaultRect;
-        }
-
-        public UFCanvas(UFControl parent)
-        {
-            this.DrawRect = new Rect(parent.DrawRect.position, DefaultSize);
         }
 
         public override void Draw()

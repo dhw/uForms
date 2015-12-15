@@ -25,6 +25,10 @@ namespace uForms
         public static void CreateNewProject()
         {
             current = new UFProject();
+            UFCanvas canvas1 = new UFCanvas();
+            canvas1.Text = "canvas1";
+            canvas1.Name = "canvas1";
+            current.Controls.Add(canvas1);
         }
 
         public static void ImportXml(string xmlPath)
