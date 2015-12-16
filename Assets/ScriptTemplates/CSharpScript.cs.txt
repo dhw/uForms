@@ -1,9 +1,0 @@
-﻿using System.Collections.Generic;
-
-namespace uForms
-{
-    /// <summary></summary>
-    public class #SCRIPTNAME#
-    {
-    }
-}
