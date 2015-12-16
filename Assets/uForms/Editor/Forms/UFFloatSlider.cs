@@ -76,9 +76,14 @@ namespace uForms
         public override void DrawDesignByRect()
         {
             if(IsHidden) { return; }
-            //            GUI.Label(this.DrawRect, "", "slider");
-            GUI.Label(this.DrawRect, "", "PreSlider");
-            GUI.Label(this.DrawRect, "", "PreSliderThumb");
+            Rect slider = this.DrawRect;
+            slider.width -= 55;
+            Rect box = this.DrawRect;
+            box.x = box.x + slider.width + 5;
+            box.width = 50;
+            GUI.Label(slider, "", "PreSlider");
+            GUI.Label(slider, "", "PreSliderThumb");
+            GUI.Label(box, "", EditorStyles.textField);
         }
 
         public UFFloatSlider()
@@ -90,9 +95,9 @@ namespace uForms
         {
             builder.WriteLine("this." + this.Name + " = new UFFloatSlider();");
             base.WriteCode(builder);
-            builder.WriteLine("this." + this.Name + ".Value = " + this.value.ToString() + ";");
-            builder.WriteLine("this." + this.Name + ".MaxValue = " + this.maxValue.ToString() + ";");
-            builder.WriteLine("this." + this.Name + ".MinValue = " + this.minValue.ToString() + ";");
+            builder.WriteLine("this." + this.Name + ".Value = " + this.value.ToString() + "f;");
+            builder.WriteLine("this." + this.Name + ".MaxValue = " + this.maxValue.ToString() + "f;");
+            builder.WriteLine("this." + this.Name + ".MinValue = " + this.minValue.ToString() + "f;");
         }
 
         public override void WriteDefinitionCode(CodeBuilder builder)
