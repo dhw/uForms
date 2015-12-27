@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace uForms
 {
-    /// <summary></summary>
     public class UFControl
     {
         const int GuideNum = 8;
@@ -29,6 +28,9 @@ namespace uForms
             this.DrawRect = rect;
         }
 
+        [XmlIgnore]
+        public Action<string> OnTextChanged = null;
+
         public string Name
         {
             get
@@ -49,7 +51,14 @@ namespace uForms
             }
             set
             {
-                this.text.text = value;
+                if(this.text.text != value)
+                {
+                    this.text.text = value;
+                    if(this.OnTextChanged != null)
+                    {
+                        this.OnTextChanged(this.text.text);
+                    }
+                }
             }
         }
 

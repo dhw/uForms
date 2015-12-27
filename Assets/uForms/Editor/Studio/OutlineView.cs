@@ -25,6 +25,7 @@ namespace uForms
             menu.AddItem(new GUIContent("Add/ObjectField"), false, OnMenuAdd, "ObjectField");
             menu.AddItem(new GUIContent("Add/FloatSlider"), false, OnMenuAdd, "FloatSlider");
             menu.AddItem(new GUIContent("Add/Image"), false, OnMenuAdd, "Image");
+            menu.AddItem(new GUIContent("Add/TextField"), false, OnMenuAdd, "TextField");
         }
 
         private void OnMenuDelete()
@@ -67,36 +68,49 @@ namespace uForms
                     canvas.Name = "canvas";
                     canvas.Text = "canvas";
                     current.Add(canvas);
+                    UFSelection.ActiveControl = canvas;
                     break;
                 case "Button":
                     var button = new UFButton(current);
                     button.Name = "button";
                     button.Text = "button";
                     current.Add(button);
+                    UFSelection.ActiveControl = button;
                     break;
                 case "Label":
                     var label = new UFLabel(Vector2.zero);
                     label.Name = "label";
                     label.Text = "label";
                     current.Add(label);
+                    UFSelection.ActiveControl = label;
                     break;
                 case "ObjectField":
                     var objectField= new UFObjectField();
                     objectField.Name = "objectField";
                     objectField.Text = "objectField";
                     current.Add(objectField);
+                    UFSelection.ActiveControl = objectField;
                     break;
                 case "FloatSlider":
                     var floatSlider= new UFFloatSlider();
                     floatSlider.Name = "floatSlider";
                     floatSlider.Text = "floatSlider";
                     current.Add(floatSlider);
+                    UFSelection.ActiveControl = floatSlider;
                     break;
                 case "Image":
                     var image= new UFImage();
                     image.Name = "image";
                     image.Text = "image";
                     current.Add(image);
+                    UFSelection.ActiveControl = image;
+                    break;
+                case "TextField":
+                    var text = new UFTextField();
+                    text.Name = "text";
+                    text.Text = "text";
+                    current.Add(text);
+                    UFSelection.ActiveControl = text;
                     break;
             }
         }
