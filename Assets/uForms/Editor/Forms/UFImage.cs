@@ -6,8 +6,6 @@ namespace uForms
 {
     public class UFImage : UFControl
     {
-        public static readonly Vector2 DefaultOffset = new Vector2(10, 10);
-
         public override Vector2 DefaultSize { get { return new Vector2(100, 100); } }
 
         private GUIContent image = new GUIContent();
@@ -40,17 +38,10 @@ namespace uForms
 
         public UFImage() { }
 
-        public override void WriteCode(CodeBuilder builder)
+        public override void WriteCodeAdditional(CodeBuilder builder)
         {
-            builder.WriteLine("this." + this.Name + " = new UFImage();");
-            base.WriteCode(builder);
             builder.WriteLine("this." + this.Name + ".GUID = \"" + this.GUID + "\";");
             builder.WriteLine("this." + this.Name + ".Image = UFUtility.LoadAssetFromGUID<Texture>(\"" + this.GUID + "\");");
-        }
-
-        public override void WriteDefinitionCode(CodeBuilder builder)
-        {
-            builder.WriteLine("private UFImage " + this.Name + ";");
         }
 
         public override void RefleshHierarchy()

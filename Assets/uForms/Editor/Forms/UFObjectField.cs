@@ -70,18 +70,11 @@ namespace uForms
         {
         }
 
-        public override void WriteCode(CodeBuilder builder)
+        public override void WriteCodeAdditional(CodeBuilder builder)
         {
-            builder.WriteLine("this." + this.Name + " = new UFObjectField();");
-            base.WriteCode(builder);
             builder.WriteLine("this." + this.Name + ".AllowSceneObject = " + (this.allowSceneObject ? "true" : "false") + ";");
         }
-
-        public override void WriteDefinitionCode(CodeBuilder builder)
-        {
-            builder.WriteLine("private UFObjectField " + this.Name + ";");
-        }
-
+        
         protected override void DrawPropertyOriginal()
         {
             DrawPropertyItem("AllowSceneObject", 

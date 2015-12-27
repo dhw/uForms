@@ -73,7 +73,7 @@ namespace uForms
         protected UFControl parent = null;
 
         public List<UFControl> childList = new List<UFControl>();
-        
+
         public Rect DrawRect = new Rect(0,0,100,100);
 
         public Rect DrawRectWithGuide
@@ -141,7 +141,7 @@ namespace uForms
                 this.isHidden = value;
             }
         }
-        
+
         public bool Foldout
         {
             get
@@ -308,7 +308,7 @@ namespace uForms
             float sy = current.y;
             float cy = current.center.y;
             float ey = current.y + current.height;
-            
+
             Rect[] guides = new Rect[GuideNum];
             guides[0].x = sx - GuideSize;
             guides[0].y = sy - GuideSize;
@@ -404,8 +404,9 @@ namespace uForms
             this.DrawRect.position += delta;
         }
 
-        public virtual void WriteCode(CodeBuilder builder)
+        public void WriteCode(CodeBuilder builder)
         {
+            builder.WriteLine("this." + this.Name + " = new " + this.GetType().Name + "();");
             builder.WriteLine("this." + this.Name + ".Text = \"" + this.Text + "\";");
             builder.WriteLine("this." + this.Name + ".Name = \"" + this.Name + "\";");
             builder.WriteLine("this." + this.Name + ".IsEnabled = " + (this.IsEnabled ? "true" : "false") + ";");
@@ -415,11 +416,17 @@ namespace uForms
                 this.DrawRect.y.ToString() + "f, " +
                 this.DrawRect.width.ToString() + "f, " +
                 this.DrawRect.height.ToString() + "f);");
+            WriteCodeAdditional(builder);
         }
-        
-        public virtual void WriteDefinitionCode(CodeBuilder builder)
+
+        public virtual void WriteCodeAdditional(CodeBuilder builder)
         {
-            throw new System.Exception("Please override code!");
+
+        }
+
+        public void WriteDefinitionCode(CodeBuilder builder)
+        {
+            builder.WriteLine("private " + this.GetType().Name + " " + this.Name + ";");
         }
     }
 }

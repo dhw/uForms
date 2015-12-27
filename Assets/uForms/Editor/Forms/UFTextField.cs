@@ -30,16 +30,5 @@ namespace uForms
         public UFTextField()
         {
         }
-        
-        public override void WriteCode(CodeBuilder builder)
-        {
-            builder.WriteLine("this." + this.Name + " = new UFTextField();");
-            base.WriteCode(builder);
-        }
-
-        public override void WriteDefinitionCode(CodeBuilder builder)
-        {
-            builder.WriteLine("private UFTextField " + this.Name + ";");
-        }
     }
 }

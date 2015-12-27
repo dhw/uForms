@@ -90,18 +90,11 @@ namespace uForms
         {
         }
 
-        public override void WriteCode(CodeBuilder builder)
+        public override void WriteCodeAdditional(CodeBuilder builder)
         {
-            builder.WriteLine("this." + this.Name + " = new UFFloatSlider();");
-            base.WriteCode(builder);
             builder.WriteLine("this." + this.Name + ".Value = " + this.value.ToString() + "f;");
             builder.WriteLine("this." + this.Name + ".MaxValue = " + this.maxValue.ToString() + "f;");
             builder.WriteLine("this." + this.Name + ".MinValue = " + this.minValue.ToString() + "f;");
-        }
-
-        public override void WriteDefinitionCode(CodeBuilder builder)
-        {
-            builder.WriteLine("private UFFloatSlider " + this.Name + ";");
         }
 
         protected override void DrawPropertyOriginal()

@@ -30,16 +30,5 @@ namespace uForms
         {
 
         }
-
-        public override void WriteCode(CodeBuilder builder)
-        {
-            builder.WriteLine("this." + this.Name + " = new UFLabel();");
-            base.WriteCode(builder);
-        }
-
-        public override void WriteDefinitionCode(CodeBuilder builder)
-        {
-            builder.WriteLine("private UFLabel " + this.Name + ";");
-        }
     }
 }

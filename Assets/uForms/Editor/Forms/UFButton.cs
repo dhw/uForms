@@ -5,9 +5,8 @@ namespace uForms
 {
     public class UFButton : UFControl
     {
-        public static readonly Vector2 DefaultOffset = new Vector2(10,10);
         public override Vector2 DefaultSize { get { return new Vector2(80, 16); } }
-        
+
         [XmlIgnore]
         public System.Action OnClick = null;
 
@@ -45,16 +44,5 @@ namespace uForms
         }
 
         public UFButton() { }
-        
-        public override void WriteCode(CodeBuilder builder)
-        {
-            builder.WriteLine("this." + this.Name + " = new UFButton();");
-            base.WriteCode(builder);
-        }
-
-        public override void WriteDefinitionCode(CodeBuilder builder)
-        {
-            builder.WriteLine("private UFButton " + this.Name + ";");
-        }
     }
 }

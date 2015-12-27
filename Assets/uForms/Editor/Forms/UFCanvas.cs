@@ -6,11 +6,9 @@ namespace uForms
     public class UFCanvas : UFControl
     {
         public override Vector2 DefaultSize { get { return new Vector2(250, 250); } }
-        public static readonly Rect DefaultRect = new Rect(0,0,250,250);
 
         public UFCanvas()
         {
-            this.DrawRect = DefaultRect;
         }
 
         public override void Draw()
@@ -40,21 +38,14 @@ namespace uForms
             DrawDesign();
         }
 
-        public override void WriteCode(CodeBuilder builder)
+        public override void WriteCodeAdditional(CodeBuilder builder)
         {
-            builder.WriteLine("this." + this.Name + " = new UFCanvas();");
-            base.WriteCode(builder);
             this.childList.ForEach(child =>
             {
                 builder.WriteLine("// " + child.Name);
                 child.WriteCode(builder);
                 builder.WriteLine("this." + this.Name + ".Add(this." + child.Name + ");");
             });
-        }
-
-        public override void WriteDefinitionCode(CodeBuilder builder)
-        {
-            builder.WriteLine("private UFCanvas " + this.Name + ";");
         }
     }
 }
