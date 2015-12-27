@@ -4,8 +4,8 @@ namespace uForms
 {
     public class UFLabel : UFControl
     {
-        public static readonly Vector2 DefaultSize = new Vector2(80, 16);
-        
+        public override Vector2 DefaultSize { get { return new Vector2(80, 16); } }
+
         public override void Draw()
         {
             GUILayout.Label(this.text);
@@ -27,11 +27,8 @@ namespace uForms
         }
 
         public UFLabel()
-        { }
-
-        public UFLabel(Vector2 position)
         {
-            this.DrawRect = new Rect(position, DefaultSize);
+
         }
 
         public override void WriteCode(CodeBuilder builder)

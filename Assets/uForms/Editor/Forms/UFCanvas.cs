@@ -5,6 +5,7 @@ namespace uForms
     /// <summary></summary>
     public class UFCanvas : UFControl
     {
+        public override Vector2 DefaultSize { get { return new Vector2(250, 250); } }
         public static readonly Rect DefaultRect = new Rect(0,0,250,250);
 
         public UFCanvas()

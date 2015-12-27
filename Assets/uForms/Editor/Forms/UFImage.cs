@@ -7,7 +7,8 @@ namespace uForms
     public class UFImage : UFControl
     {
         public static readonly Vector2 DefaultOffset = new Vector2(10, 10);
-        public static readonly Vector2 DefaultSize = new Vector2(100, 100);
+
+        public override Vector2 DefaultSize { get { return new Vector2(100, 100); } }
 
         private GUIContent image = new GUIContent();
 

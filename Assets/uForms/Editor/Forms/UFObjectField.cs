@@ -6,7 +6,7 @@ namespace uForms
 {
     public class UFObjectField : UFControl
     {
-        public static readonly Vector2 DefaultSize = new Vector2(100, 16);
+        public override Vector2 DefaultSize { get { return new Vector2(100, 16); } }
 
         [XmlIgnore]
         public System.Action<UnityEngine.Object> OnTargetChanged = null;
@@ -68,7 +68,6 @@ namespace uForms
 
         public UFObjectField()
         {
-            this.DrawRect = new Rect(Vector2.zero, DefaultSize);
         }
 
         public override void WriteCode(CodeBuilder builder)

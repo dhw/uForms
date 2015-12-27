@@ -11,6 +11,7 @@ namespace uForms
 
     public class UFStackPanel : UFControl
     {
+        public override Vector2 DefaultSize { get { return new Vector2(250, 250); } }
         public Orientation direction = Orientation.Vertical;
 
         public UFStackPanel()

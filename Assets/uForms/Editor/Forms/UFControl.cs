@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace uForms
 {
-    public class UFControl
+    public abstract class UFControl
     {
         const int GuideNum = 8;
         const int GuideMargin = 3;
@@ -20,7 +20,8 @@ namespace uForms
 
         public UFControl()
         {
-
+            Debug.Log("UFControl constructor");
+            this.DrawRect = new Rect(Vector2.zero, DefaultSize);
         }
 
         public UFControl(Rect rect)
@@ -180,6 +181,8 @@ namespace uForms
                 return 0;
             }
         }
+
+        public abstract Vector2 DefaultSize { get; }
 
         public virtual void RefleshHierarchy()
         {

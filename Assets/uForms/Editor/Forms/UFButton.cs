@@ -6,7 +6,7 @@ namespace uForms
     public class UFButton : UFControl
     {
         public static readonly Vector2 DefaultOffset = new Vector2(10,10);
-        public static readonly Vector2 DefaultSize = new Vector2(80,16);
+        public override Vector2 DefaultSize { get { return new Vector2(80, 16); } }
         
         [XmlIgnore]
         public System.Action OnClick = null;
@@ -45,17 +45,7 @@ namespace uForms
         }
 
         public UFButton() { }
-
-        public UFButton(Vector2 position)
-        {
-            this.DrawRect = new Rect(position, DefaultSize);
-        }
-
-        public UFButton(UFControl parent)
-        {
-            this.DrawRect = new Rect(parent.DrawRect.position + DefaultOffset, DefaultSize);
-        }
-
+        
         public override void WriteCode(CodeBuilder builder)
         {
             builder.WriteLine("this." + this.Name + " = new UFButton();");

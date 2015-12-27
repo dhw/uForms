@@ -5,7 +5,7 @@ namespace uForms
 {
     public class UFTextField : UFControl
     {
-        public static readonly Vector2 DefaultSize = new Vector2(80, 16);
+        public override Vector2 DefaultSize { get { return new Vector2(80, 16); } }
         
         public override void Draw()
         {
@@ -29,7 +29,6 @@ namespace uForms
 
         public UFTextField()
         {
-            this.DrawRect = new Rect(Vector2.zero, DefaultSize);
         }
         
         public override void WriteCode(CodeBuilder builder)

@@ -71,14 +71,14 @@ namespace uForms
                     UFSelection.ActiveControl = canvas;
                     break;
                 case "Button":
-                    var button = new UFButton(current);
+                    var button = new UFButton();
                     button.Name = "button";
                     button.Text = "button";
                     current.Add(button);
                     UFSelection.ActiveControl = button;
                     break;
                 case "Label":
-                    var label = new UFLabel(Vector2.zero);
+                    var label = new UFLabel();
                     label.Name = "label";
                     label.Text = "label";
                     current.Add(label);

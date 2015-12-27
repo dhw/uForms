@@ -6,7 +6,7 @@ namespace uForms
 {
     public class UFFloatSlider : UFControl
     {
-        public static readonly Vector2 DefaultSize = new Vector2(100, 16);
+        public override Vector2 DefaultSize { get { return new Vector2(100, 16); } }
 
         [XmlIgnore]
         public System.Action<float> OnValueChanged = null;
@@ -88,7 +88,6 @@ namespace uForms
 
         public UFFloatSlider()
         {
-            this.DrawRect = new Rect(Vector2.zero, DefaultSize);
         }
 
         public override void WriteCode(CodeBuilder builder)
