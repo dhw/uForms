@@ -29,6 +29,11 @@ namespace Demo
                     go.transform.localScale = Vector3.one * value;
                 }
             };
+
+            this.text.OnTextChanged += (text) =>
+            {
+                this.label.Text = text;
+            };
         }
     }
 }

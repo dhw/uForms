@@ -32,6 +32,14 @@ namespace Demo
             this.button.IsHidden = false;
             this.button.DrawRect = new Rect(32f, 63f, 178.5f, 42.5f);
             this.canvas1.Add(this.button);
+            // text
+            this.text = new UFTextField();
+            this.text.Text = "text";
+            this.text.Name = "text";
+            this.text.IsEnabled = true;
+            this.text.IsHidden = false;
+            this.text.DrawRect = new Rect(36f, 121f, 80f, 16f);
+            this.canvas1.Add(this.text);
             this.Controls.Add(this.canvas1);
             // canvas2
             this.canvas2 = new UFCanvas();
@@ -78,6 +86,7 @@ namespace Demo
         private UFCanvas canvas1;
         private UFLabel label;
         private UFButton button;
+        private UFTextField text;
         private UFCanvas canvas2;
         private UFObjectField objectField;
         private UFFloatSlider floatSlider;
