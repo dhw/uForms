@@ -5,6 +5,7 @@ namespace uForms
     /// <summary></summary>
     public class UFCanvas : UFControl
     {
+        public override string DefaultName { get { return "canvas"; } }
         public override Vector2 DefaultSize { get { return new Vector2(250, 250); } }
 
         public override void Draw()

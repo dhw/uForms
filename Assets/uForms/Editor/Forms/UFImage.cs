@@ -7,6 +7,7 @@ namespace uForms
 {
     public class UFImage : UFControl
     {
+        public override string DefaultName { get { return "image"; } }
         public override Vector2 DefaultSize { get { return new Vector2(100, 100); } }
 
         private GUIContent image = new GUIContent();

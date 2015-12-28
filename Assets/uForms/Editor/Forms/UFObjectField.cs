@@ -6,6 +6,7 @@ namespace uForms
 {
     public class UFObjectField : UFControl
     {
+        public override string DefaultName { get { return "objectField"; } }
         public override Vector2 DefaultSize { get { return new Vector2(100, 16); } }
         public override GUIStyle DesignGUIStyle { get { return EditorStyles.objectField; } }
 

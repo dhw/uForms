@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,13 +22,14 @@ namespace uForms
             base.OnEnable();
             menu = new GenericMenu();
             menu.AddItem(new GUIContent("Delete"), false, OnMenuDelete);
-            menu.AddItem(new GUIContent("Add/Canvas"), false, OnMenuAdd, "Canvas");
-            menu.AddItem(new GUIContent("Add/Button"), false, OnMenuAdd, "Button");
-            menu.AddItem(new GUIContent("Add/Label"), false, OnMenuAdd, "Label");
-            menu.AddItem(new GUIContent("Add/ObjectField"), false, OnMenuAdd, "ObjectField");
-            menu.AddItem(new GUIContent("Add/FloatSlider"), false, OnMenuAdd, "FloatSlider");
-            menu.AddItem(new GUIContent("Add/Image"), false, OnMenuAdd, "Image");
-            menu.AddItem(new GUIContent("Add/TextField"), false, OnMenuAdd, "TextField");
+            
+            var assembly = Assembly.GetAssembly(typeof(UFControl));
+
+            var list = assembly.GetTypes()
+                .Where(t => t.BaseType == typeof(UFControl))
+                .ToList();
+
+            list.ForEach(t => menu.AddItem(new GUIContent("Add/" + t.Name.Replace("UF", "")), false, OnMenuAdd, t.FullName));
         }
 
         private void OnMenuDelete()
@@ -51,7 +55,7 @@ namespace uForms
             var current = UFSelection.ActiveControl;
             if(current == null)
             {
-                if(typeString == "Canvas")
+                if(typeString == "UFCanvas")
                 {
                     var canvas = new UFCanvas();
                     canvas.Name = "canvas";
@@ -61,57 +65,18 @@ namespace uForms
 
                 return;
             }
-            switch(typeString)
+            else
             {
-                case "Canvas":
-                    var canvas = new UFCanvas();
-                    canvas.Name = "canvas";
-                    canvas.Text = "canvas";
-                    current.Add(canvas);
-                    UFSelection.ActiveControl = canvas;
-                    break;
-                case "Button":
-                    var button = new UFButton();
-                    button.Name = "button";
-                    button.Text = "button";
-                    current.Add(button);
-                    UFSelection.ActiveControl = button;
-                    break;
-                case "Label":
-                    var label = new UFLabel();
-                    label.Name = "label";
-                    label.Text = "label";
-                    current.Add(label);
-                    UFSelection.ActiveControl = label;
-                    break;
-                case "ObjectField":
-                    var objectField= new UFObjectField();
-                    objectField.Name = "objectField";
-                    objectField.Text = "objectField";
-                    current.Add(objectField);
-                    UFSelection.ActiveControl = objectField;
-                    break;
-                case "FloatSlider":
-                    var floatSlider= new UFFloatSlider();
-                    floatSlider.Name = "floatSlider";
-                    floatSlider.Text = "floatSlider";
-                    current.Add(floatSlider);
-                    UFSelection.ActiveControl = floatSlider;
-                    break;
-                case "Image":
-                    var image= new UFImage();
-                    image.Name = "image";
-                    image.Text = "image";
-                    current.Add(image);
-                    UFSelection.ActiveControl = image;
-                    break;
-                case "TextField":
-                    var text = new UFTextField();
-                    text.Name = "text";
-                    text.Text = "text";
-                    current.Add(text);
-                    UFSelection.ActiveControl = text;
-                    break;
+                var assembly = Assembly.GetAssembly(typeof(UFControl));
+                Type childType = assembly.GetType(typeString);
+                if(childType != null)
+                {
+                    UFControl child = Activator.CreateInstance(childType) as UFControl;
+                    child.Name = child.DefaultName;
+                    child.Text = child.DefaultName;
+                    current.Add(child);
+                    UFSelection.ActiveControl = child;
+                }
             }
         }
         

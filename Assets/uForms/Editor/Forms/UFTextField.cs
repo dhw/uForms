@@ -5,6 +5,7 @@ namespace uForms
 {
     public class UFTextField : UFControl
     {
+        public override string DefaultName { get { return "text"; } }
         public override Vector2 DefaultSize { get { return new Vector2(80, 16); } }
         public override GUIStyle DesignGUIStyle { get { return EditorStyles.textField; } }
 

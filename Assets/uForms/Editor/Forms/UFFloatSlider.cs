@@ -6,6 +6,7 @@ namespace uForms
 {
     public class UFFloatSlider : UFControl
     {
+        public override string DefaultName { get { return "floatSlider"; } }
         public override Vector2 DefaultSize { get { return new Vector2(100, 16); } }
 
         [XmlIgnore]

@@ -173,6 +173,8 @@ namespace uForms
             }
         }
 
+        public abstract string DefaultName { get; }
+
         public abstract Vector2 DefaultSize { get; }
 
         public virtual GUIStyle DesignGUIStyle { get { return EditorStyles.label; } }

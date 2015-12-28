@@ -5,6 +5,7 @@ namespace uForms
 {
     public class UFButton : UFControl
     {
+        public override string DefaultName { get { return "button"; } }
         public override Vector2 DefaultSize { get { return new Vector2(80, 16); } }
         public override GUIStyle DesignGUIStyle { get { return new GUIStyle("button"); } }
 
