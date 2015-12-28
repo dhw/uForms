@@ -12,20 +12,29 @@ namespace uForms
         const int GuideMargin = 3;
         const int GuideSize = (GuideMargin * 2) + 1;
 
+        private Vector2 propertyViewScroll = Vector2.zero;
+
+        private bool isHidden = false;
+
+        private bool isEnabled = true;
+
+        private bool foldout = true;
+
+        [XmlIgnore]
+        protected UFControl parent = null;
+
         [XmlIgnore]
         protected GUIContent name = new GUIContent("");
 
         [XmlIgnore]
         protected GUIContent text = new GUIContent("");
 
-        public UFControl()
-        {
-            Debug.Log("UFControl constructor");
-            this.DrawRect = new Rect(Vector2.zero, DefaultSize);
-        }
-
         [XmlIgnore]
         public Action<string> OnTextChanged = null;
+
+        public List<UFControl> childList = new List<UFControl>();
+
+        public Rect DrawRect = new Rect(0,0,100,100);
 
         public string Name
         {
@@ -58,19 +67,6 @@ namespace uForms
             }
         }
 
-        private bool isHidden = false;
-
-        private bool isEnabled = true;
-
-        private bool foldout = true;
-
-        [XmlIgnore]
-        protected UFControl parent = null;
-
-        public List<UFControl> childList = new List<UFControl>();
-
-        public Rect DrawRect = new Rect(0,0,100,100);
-
         public Rect DrawRectWithGuide
         {
             get
@@ -79,25 +75,25 @@ namespace uForms
             }
         }
 
-        public Vector2 parentPosition
+        public Vector2 ParentPosition
         {
             get
             {
                 if(this.parent != null)
                 {
-                    return this.parent.parentPosition + this.parent.DrawRect.position;
+                    return this.parent.ParentPosition + this.parent.DrawRect.position;
                 }
                 return Vector2.zero;
             }
         }
 
-        public Vector2 grobalPosition
+        public Vector2 GrobalPosition
         {
             get
             {
                 if(this.parent != null)
                 {
-                    return this.parent.grobalPosition + this.DrawRect.position;
+                    return this.parent.GrobalPosition + this.DrawRect.position;
                 }
                 return this.DrawRect.position;
             }
@@ -181,19 +177,24 @@ namespace uForms
 
         public virtual GUIStyle DesignGUIStyle { get { return EditorStyles.label; } }
 
-        public virtual void RefleshHierarchy()
+        public UFControl()
         {
-            this.childList.ForEach(child =>
-            {
-                child.parent = this;
-                child.RefleshHierarchy();
-            });
+            Debug.Log("UFControl constructor");
+            this.DrawRect = new Rect(Vector2.zero, DefaultSize);
         }
 
         public void Add(UFControl child)
         {
             child.parent = this;
             this.childList.Add(child);
+        }
+
+        public void RemoveFromTree()
+        {
+            if(this.parent != null)
+            {
+                this.parent.childList.Remove(this);
+            }
         }
 
         public List<UFControl> GetOutlineDrawList()
@@ -233,14 +234,6 @@ namespace uForms
             }
         }
 
-        public void RemoveFromTree()
-        {
-            if(this.parent != null)
-            {
-                this.parent.childList.Remove(this);
-            }
-        }
-
         public abstract void Draw();
 
         public abstract void DrawByRect();
@@ -255,7 +248,14 @@ namespace uForms
             GUI.Label(this.DrawRect, this.Text, this.DesignGUIStyle);
         }
 
-        Vector2 propertyViewScroll = Vector2.zero;
+        public virtual void RefleshHierarchy()
+        {
+            this.childList.ForEach(child =>
+            {
+                child.parent = this;
+                child.RefleshHierarchy();
+            });
+        }
 
         public void DrawProperty()
         {
@@ -291,7 +291,7 @@ namespace uForms
 
         public void DrawGuide()
         {
-            Rect prev = new Rect(this.grobalPosition, this.DrawRect.size);
+            Rect prev = new Rect(this.GrobalPosition, this.DrawRect.size);
             Rect current = GUI.Window(-1, prev, DrawGuideRect, "", "grey_border");
 
             float sx = current.x;
@@ -391,11 +391,6 @@ namespace uForms
             GUI.DragWindow();
         }
 
-        private void Move(Vector2 delta)
-        {
-            this.DrawRect.position += delta;
-        }
-
         public void WriteCode(CodeBuilder builder)
         {
             builder.WriteLine("this." + this.Name + " = new " + this.GetType().Name + "();");
@@ -411,14 +406,14 @@ namespace uForms
             WriteCodeAdditional(builder);
         }
 
-        public virtual void WriteCodeAdditional(CodeBuilder builder)
-        {
-
-        }
-
         public void WriteDefinitionCode(CodeBuilder builder)
         {
             builder.WriteLine("private " + this.GetType().Name + " " + this.Name + ";");
+        }
+
+        public virtual void WriteCodeAdditional(CodeBuilder builder)
+        {
+
         }
     }
 }

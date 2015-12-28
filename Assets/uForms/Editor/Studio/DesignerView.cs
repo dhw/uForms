@@ -39,12 +39,12 @@ namespace uForms
                 if(selected) { return; }
                 if(UFSelection.ActiveControl == node)
                 {
-                    if(node.DrawRectWithGuide.Contains(click - node.parentPosition))
+                    if(node.DrawRectWithGuide.Contains(click - node.ParentPosition))
                     {
                         selected = true;
                     }
                 }
-                if(node.DrawRect.Contains(click - node.parentPosition))
+                if(node.DrawRect.Contains(click - node.ParentPosition))
                 {
                     UFSelection.ActiveControl = node;
                     selected = true;
