@@ -19,6 +19,7 @@ namespace Demo
             this.button.OnClick += () =>
             {
                 this.objectField.Target = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                this.toggle.Checked = true;
             };
 
             this.floatSlider.OnValueChanged += (value) =>
@@ -33,6 +34,16 @@ namespace Demo
             this.text.OnTextChanged += (text) =>
             {
                 this.label.Text = text;
+            };
+
+            this.toggle.OnCheckStateChanged += (check) =>
+            {
+                if(this.objectField.Target != null)
+                {
+                    var go = this.objectField.Target as GameObject;
+                    go.SetActive(check);
+                }
+                this.toggle.Text = (check ? "active" : "inactive");
             };
         }
     }

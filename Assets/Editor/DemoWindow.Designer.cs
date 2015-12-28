@@ -78,6 +78,15 @@ namespace Demo
             this.image.GUID = "e6f532133ac63bb49a9b65446503128b";
             this.image.Image = UFUtility.LoadAssetFromGUID<Texture>("e6f532133ac63bb49a9b65446503128b");
             this.canvas2.Add(this.image);
+            // toggle
+            this.toggle = new UFToggle();
+            this.toggle.Text = "active";
+            this.toggle.Name = "toggle";
+            this.toggle.IsEnabled = true;
+            this.toggle.IsHidden = false;
+            this.toggle.DrawRect = new Rect(32f, 15f, 100f, 16f);
+            this.toggle.Checked = true;
+            this.canvas2.Add(this.toggle);
             this.Controls.Add(this.canvas2);
         }
         
@@ -91,5 +100,6 @@ namespace Demo
         private UFObjectField objectField;
         private UFFloatSlider floatSlider;
         private UFImage image;
+        private UFToggle toggle;
     }
 }
