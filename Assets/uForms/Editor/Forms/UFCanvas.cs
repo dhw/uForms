@@ -7,10 +7,6 @@ namespace uForms
     {
         public override Vector2 DefaultSize { get { return new Vector2(250, 250); } }
 
-        public UFCanvas()
-        {
-        }
-
         public override void Draw()
         {
             if(IsHidden) { return; }

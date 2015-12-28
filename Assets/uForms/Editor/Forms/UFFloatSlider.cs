@@ -61,7 +61,7 @@ namespace uForms
 
         public override void Draw()
         {
-
+            this.Value = EditorGUILayout.Slider(this.Value, this.minValue, this.maxValue);
         }
 
         public override void DrawByRect()
@@ -84,10 +84,6 @@ namespace uForms
             GUI.Label(slider, "", "PreSlider");
             GUI.Label(slider, "", "PreSliderThumb");
             GUI.Label(box, "", EditorStyles.textField);
-        }
-
-        public UFFloatSlider()
-        {
         }
 
         public override void WriteCodeAdditional(CodeBuilder builder)

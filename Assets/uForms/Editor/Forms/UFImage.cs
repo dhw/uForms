@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 using UnityEditor;
 using UnityEngine;
 
@@ -25,6 +26,11 @@ namespace uForms
             }
         }
 
+        public override void Draw()
+        {
+            GUILayout.Label(this.image);
+        }
+
         public override void DrawByRect()
         {
             GUI.Label(this.DrawRect, this.image);
@@ -35,8 +41,6 @@ namespace uForms
             if(IsHidden) { return; }
             GUI.Label(this.DrawRect, this.image);
         }
-
-        public UFImage() { }
 
         public override void WriteCodeAdditional(CodeBuilder builder)
         {

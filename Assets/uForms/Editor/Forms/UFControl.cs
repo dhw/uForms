@@ -24,11 +24,6 @@ namespace uForms
             this.DrawRect = new Rect(Vector2.zero, DefaultSize);
         }
 
-        public UFControl(Rect rect)
-        {
-            this.DrawRect = rect;
-        }
-
         [XmlIgnore]
         public Action<string> OnTextChanged = null;
 
@@ -184,6 +179,8 @@ namespace uForms
 
         public abstract Vector2 DefaultSize { get; }
 
+        public virtual GUIStyle DesignGUIStyle { get { return EditorStyles.label; } }
+
         public virtual void RefleshHierarchy()
         {
             this.childList.ForEach(child =>
@@ -244,23 +241,18 @@ namespace uForms
             }
         }
 
-        public virtual void Draw()
-        {
+        public abstract void Draw();
 
-        }
-
-        public virtual void DrawByRect()
-        {
-
-        }
+        public abstract void DrawByRect();
 
         public virtual void DrawDesign()
         {
+            GUILayout.Label(this.Text, this.DesignGUIStyle);
         }
 
         public virtual void DrawDesignByRect()
         {
-
+            GUI.Label(this.DrawRect, this.Text, this.DesignGUIStyle);
         }
 
         Vector2 propertyViewScroll = Vector2.zero;
