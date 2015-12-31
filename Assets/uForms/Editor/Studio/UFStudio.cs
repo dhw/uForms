@@ -94,6 +94,15 @@ namespace uForms
                     }
                 }
 
+                if(GUILayout.Button("Export Native Code", UIOP.Button))
+                {
+                    string path = EditorUtility.SaveFilePanel("Select the path to export", "Assets/Editor", UFProject.Current.ClassName, "cs");
+                    if(!string.IsNullOrEmpty(path) && path.Contains("/Editor/"))
+                    {
+                        UFProject.ExportNativeCode(path);
+                    }
+                }
+
                 if(GUILayout.Button("Import Xml", UIOP.Button))
                 {
                     string path = EditorUtility.OpenFilePanel("Select the path to import", "", "xml");

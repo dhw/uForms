@@ -18,5 +18,12 @@ namespace uForms
         {
             this.Text = EditorGUI.TextField(this.DrawRect, this.Text);
         }
+
+        public override void WriteNativeCodeByRect(CodeBuilder builder)
+        {
+            builder.WriteLine(string.Format("EditorGUI.TextField(new Rect({0}f, {1}f, {2}f, {3}f), {4});",
+                this.DrawRect.x, this.DrawRect.y, this.DrawRect.width, this.DrawRect.height,
+                "\"" + this.Text + "\""));
+        }
     }
 }

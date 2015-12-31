@@ -72,5 +72,12 @@ namespace uForms
             DrawPropertyItem("Checked",
                 () => this.Checked = EditorGUILayout.Toggle(this.Checked));
         }
+
+        public override void WriteNativeCodeByRect(CodeBuilder builder)
+        {
+            builder.WriteLine(string.Format("GUI.Toggle(new Rect({0}f, {1}f, {2}f, {3}f), {4}, {5});",
+                this.DrawRect.x, this.DrawRect.y, this.DrawRect.width, this.DrawRect.height,
+                (this.Checked ? "true" : "false"),"\"" + this.Text + "\""));
+        }
     }
 }

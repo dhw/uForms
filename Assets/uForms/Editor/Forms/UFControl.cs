@@ -417,5 +417,7 @@ namespace uForms
         {
 
         }
+
+        public abstract void WriteNativeCodeByRect(CodeBuilder builder);
     }
 }

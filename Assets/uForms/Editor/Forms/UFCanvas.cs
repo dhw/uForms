@@ -44,5 +44,17 @@ namespace uForms
                 builder.WriteLine("this." + this.Name + ".Add(this." + child.Name + ");");
             });
         }
+
+        public override void WriteNativeCodeByRect(CodeBuilder builder)
+        {
+            builder.WriteLine(string.Format("GUI.BeginGroup(new Rect({0}f, {1}f, {2}f, {3}f));",
+                this.DrawRect.x, this.DrawRect.y, this.DrawRect.width, this.DrawRect.height));
+            builder.WriteLine("{");
+            ++builder.Indent;
+            this.childList.ForEach(child => child.WriteNativeCodeByRect(builder));
+            --builder.Indent;
+            builder.WriteLine("}");
+            builder.WriteLine("GUI.EndGroup();");
+        }
     }
 }

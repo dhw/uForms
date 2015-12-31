@@ -184,6 +184,45 @@ namespace uForms
             }
         }
 
+        public static void ExportNativeCode(string codePath)
+        {
+            CodeBuilder cb = new CodeBuilder();
+            cb.WriteLine("using UnityEngine;");
+            cb.WriteLine("using UnityEditor;");
+            cb.WriteLine("");
+            cb.WriteLine("namespace " + current.Namespace);
+            cb.WriteLine("{");
+            cb.Indent++;
+            cb.WriteLine("public class " + current.ClassName + " : EditorWindow");
+            cb.WriteLine("{");
+            cb.Indent++;
+            cb.WriteLine("[MenuItem(\"Tools/" + current.ClassName + "\")]");
+            cb.WriteLine("public static void OpenWindow()");
+            cb.WriteLine("{");
+            cb.Indent++;
+            cb.WriteLine("GetWindow<" + current.ClassName + ">(\"" + current.ClassName + "\");");
+            cb.Indent--;
+            cb.WriteLine("}");
+            cb.WriteLine("");
+            cb.WriteLine("void OnGUI()");
+            cb.WriteLine("{");
+            cb.Indent++;
+            current.Controls.ForEach(child => child.WriteNativeCodeByRect(cb));
+            cb.Indent--;
+            cb.WriteLine("}");
+            cb.Indent--;
+            cb.WriteLine("}");
+            cb.Indent--;
+            cb.WriteLine("}");
+            File.WriteAllText(codePath, cb.GetCode(), new UTF8Encoding(true));
+
+            if(codePath.Contains("Assets/"))
+            {
+                codePath = codePath.Substring(codePath.IndexOf("Assets/"));
+                AssetDatabase.ImportAsset(codePath);
+            }
+        }
+
         public void DrawProperty()
         {
             this.Namespace = EditorGUILayout.TextField("Namespace", this.Namespace);

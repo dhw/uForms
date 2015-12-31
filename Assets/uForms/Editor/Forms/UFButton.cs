@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 using UnityEngine;
 
 namespace uForms
@@ -32,6 +33,15 @@ namespace uForms
                     this.OnClick();
                 }
             }
+        }
+
+        public override void WriteNativeCodeByRect(CodeBuilder builder)
+        {
+            builder.WriteLine(string.Format("if(GUI.Button(new Rect({0}f, {1}f, {2}f, {3}f), {4}))",
+                this.DrawRect.x, this.DrawRect.y, this.DrawRect.width, this.DrawRect.height, "\"" + this.Text +"\""));
+            builder.WriteLine("{");
+            builder.WriteLine("");
+            builder.WriteLine("}");
         }
     }
 }
