@@ -10,7 +10,7 @@ namespace uForms
 
         public class UIOP
         {
-            public static GUILayoutOption[] Button = {GUILayout.Width(100), GUILayout.Height(60) };
+            public static GUILayoutOption[] Button = {GUILayout.Width(120), GUILayout.Height(40) };
         }
 
         [MenuItem("Window/uForms Studio")]
