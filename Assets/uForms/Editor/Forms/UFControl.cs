@@ -418,6 +418,27 @@ namespace uForms
 
         }
 
+        public void WriteNativeRectDefinitionCode(CodeBuilder builder)
+        {
+            builder.WriteLine("public static readonly Rect {0} = new Rect({1}f, {2}f, {3}f, {4}f);",
+                this.Name, this.DrawRect.x, this.DrawRect.y, this.DrawRect.width, this.DrawRect.height);
+        }
+
+        public virtual void WriteNativeContentDefinitionCode(CodeBuilder builder)
+        {
+
+        }
+
+        public virtual void WriteNativeConstDefinitionCode(CodeBuilder builder)
+        {
+
+        }
+
+        public virtual void WriteNativeVariableDefinitionCode(CodeBuilder builder)
+        {
+
+        }
+
         public abstract void WriteNativeCodeByRect(CodeBuilder builder);
     }
 }

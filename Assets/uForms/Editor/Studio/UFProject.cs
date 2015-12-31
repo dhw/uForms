@@ -196,6 +196,37 @@ namespace uForms
             cb.WriteLine("public class " + current.ClassName + " : EditorWindow");
             cb.WriteLine("{");
             cb.Indent++;
+
+            cb.WriteLine("public class DrawRects");
+            cb.WriteLine("{");
+            cb.Indent++;
+            current.Controls.ForEach(child => child.ForTree(node => node.WriteNativeRectDefinitionCode(cb)));
+            cb.Indent--;
+            cb.WriteLine("}");
+            cb.WriteLine("");
+
+            cb.WriteLine("public class DrawContents");
+            cb.WriteLine("{");
+            cb.Indent++;
+            current.Controls.ForEach(child => child.ForTree(node => node.WriteNativeContentDefinitionCode(cb)));
+            cb.Indent--;
+            cb.WriteLine("}");
+            cb.WriteLine("");
+
+            cb.WriteLine("#region Constants");
+            cb.WriteLine("");
+            current.Controls.ForEach(child => child.ForTree(node => node.WriteNativeConstDefinitionCode(cb)));
+            cb.WriteLine("");
+            cb.WriteLine("#endregion Constants");
+            cb.WriteLine("");
+
+            cb.WriteLine("#region Variables");
+            cb.WriteLine("");
+            current.Controls.ForEach(child => child.ForTree(node => node.WriteNativeVariableDefinitionCode(cb)));
+            cb.WriteLine("");
+            cb.WriteLine("#endregion Variables");
+            cb.WriteLine("");
+
             cb.WriteLine("[MenuItem(\"Tools/" + current.ClassName + "\")]");
             cb.WriteLine("public static void OpenWindow()");
             cb.WriteLine("{");

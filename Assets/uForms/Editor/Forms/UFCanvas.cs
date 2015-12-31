@@ -47,8 +47,7 @@ namespace uForms
 
         public override void WriteNativeCodeByRect(CodeBuilder builder)
         {
-            builder.WriteLine(string.Format("GUI.BeginGroup(new Rect({0}f, {1}f, {2}f, {3}f));",
-                this.DrawRect.x, this.DrawRect.y, this.DrawRect.width, this.DrawRect.height));
+            builder.WriteLine("GUI.BeginGroup(DrawRects.{0});", this.Name);
             builder.WriteLine("{");
             ++builder.Indent;
             this.childList.ForEach(child => child.WriteNativeCodeByRect(builder));

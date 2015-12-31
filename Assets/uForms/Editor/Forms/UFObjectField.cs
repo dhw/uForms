@@ -69,11 +69,15 @@ namespace uForms
                 () => this.allowSceneObject = EditorGUILayout.Toggle(this.allowSceneObject));
         }
 
+        public override void WriteNativeVariableDefinitionCode(CodeBuilder builder)
+        {
+            builder.WriteLine(string.Format("private UnityEngine.Object {0}Object = null;", this.Name));
+        }
+
         public override void WriteNativeCodeByRect(CodeBuilder builder)
         {
-            builder.WriteLine(string.Format("EditorGUI.ObjectField(new Rect({0}f, {1}f, {2}f, {3}f), null, typeof(UnityEngine.Object), {4});",
-                this.DrawRect.x, this.DrawRect.y, this.DrawRect.width, this.DrawRect.height,
-                 (this.allowSceneObject ? "true" : "false")));
+            builder.WriteLine(string.Format("this.{0}Object = EditorGUI.ObjectField(DrawRects.{1}, this.{2}Object, typeof(UnityEngine.Object), {3});",
+                this.Name, this.Name, this.Name, (this.allowSceneObject ? "true" : "false")));
         }
     }
 }

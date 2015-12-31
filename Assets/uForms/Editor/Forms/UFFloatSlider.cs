@@ -101,11 +101,21 @@ namespace uForms
             DrawPropertyItem("Value", () => this.Value = EditorGUILayout.FloatField(this.Value));
         }
 
+        public override void WriteNativeConstDefinitionCode(CodeBuilder builder)
+        {
+            builder.WriteLine("public const float {0}Min = {1}f;", this.Name, this.MinValue);
+            builder.WriteLine("public const float {0}Max = {1}f;", this.Name, this.MaxValue);
+        }
+
+        public override void WriteNativeVariableDefinitionCode(CodeBuilder builder)
+        {
+            builder.WriteLine("private float {0}Value = {1}f;", this.Name, this.Value);
+        }
+
         public override void WriteNativeCodeByRect(CodeBuilder builder)
         {
-            builder.WriteLine(string.Format("EditorGUI.Slider(new Rect({0}f, {1}f, {2}f, {3}f), {4}f, {5}f, {6}f);",
-                this.DrawRect.x, this.DrawRect.y, this.DrawRect.width, this.DrawRect.height, 
-                this.Value, this.MinValue, this.MaxValue));
+            builder.WriteLine("this.{0}Value = EditorGUI.Slider(DrawRects.{1}, this.{2}Value, {3}Min, {4}Max);",
+                this.Name, this.Name, this.Name, this.Name, this.Name);
         }
     }
 }

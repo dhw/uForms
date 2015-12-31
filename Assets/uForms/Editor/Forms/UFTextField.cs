@@ -18,12 +18,16 @@ namespace uForms
         {
             this.Text = EditorGUI.TextField(this.DrawRect, this.Text);
         }
+        
+        public override void WriteNativeVariableDefinitionCode(CodeBuilder builder)
+        {
+            builder.WriteLine(string.Format("private string {0}Text = \"{1}\";", this.Name, this.Text));
+        }
 
         public override void WriteNativeCodeByRect(CodeBuilder builder)
         {
-            builder.WriteLine(string.Format("EditorGUI.TextField(new Rect({0}f, {1}f, {2}f, {3}f), {4});",
-                this.DrawRect.x, this.DrawRect.y, this.DrawRect.width, this.DrawRect.height,
-                "\"" + this.Text + "\""));
+            builder.WriteLine(string.Format("this.{0}Text = EditorGUI.TextField(DrawRects.{1}, this.{2}Text);",
+                this.Name, this.Name, this.Name));
         }
     }
 }
